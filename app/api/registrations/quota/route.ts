@@ -16,26 +16,21 @@ export async function GET() {
     }
 
     // Count active registrations per training type
-    const registrations = await prisma.registration.findMany({
+    const counts = await prisma.registration.groupBy({
+      by: ['pilihanPelatihan'],
       where: {
         status: {
           in: ['PENDING', 'VERIFY']
         }
       },
-      select: {
+      _count: {
         pilihanPelatihan: true
       }
     })
 
-    const softwareCount = registrations.filter(
-      (r) => r.pilihanPelatihan === 'SOFTWARE'
-    ).length
-    const networkCount = registrations.filter(
-      (r) => r.pilihanPelatihan === 'NETWORK'
-    ).length
-    const multimediaCount = registrations.filter(
-      (r) => r.pilihanPelatihan === 'MULTIMEDIA'
-    ).length
+    const softwareCount = counts.find(c => c.pilihanPelatihan === 'SOFTWARE')?._count.pilihanPelatihan ?? 0
+    const networkCount = counts.find(c => c.pilihanPelatihan === 'NETWORK')?._count.pilihanPelatihan ?? 0
+    const multimediaCount = counts.find(c => c.pilihanPelatihan === 'MULTIMEDIA')?._count.pilihanPelatihan ?? 0
 
     return NextResponse.json({
       software: {
