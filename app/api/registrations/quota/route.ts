@@ -27,9 +27,15 @@ export async function GET() {
       }
     })
 
-    const softwareCount = registrations.filter(r => r.pilihanPelatihan === 'SOFTWARE').length
-    const networkCount = registrations.filter(r => r.pilihanPelatihan === 'NETWORK').length
-    const multimediaCount = registrations.filter(r => r.pilihanPelatihan === 'MULTIMEDIA').length
+    const softwareCount = registrations.filter(
+      (r) => r.pilihanPelatihan === 'SOFTWARE'
+    ).length
+    const networkCount = registrations.filter(
+      (r) => r.pilihanPelatihan === 'NETWORK'
+    ).length
+    const multimediaCount = registrations.filter(
+      (r) => r.pilihanPelatihan === 'MULTIMEDIA'
+    ).length
 
     return NextResponse.json({
       software: {
