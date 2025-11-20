@@ -1,4 +1,6 @@
-import { prisma } from '@/lib/prisma'
+'use client'
+
+import { useEffect, useState } from 'react'
 import Navbar from '@/components/landing/Navbar'
 import HeroSection from '@/components/landing/HeroSection'
 import AboutSection from '@/components/landing/AboutSection'
@@ -8,31 +10,6 @@ import SponsorsSection from '@/components/landing/SponsorsSection'
 import FaqSection from '@/components/landing/FaqSection'
 import CtaSection from '@/components/landing/CtaSection'
 import Footer from '@/components/landing/Footer'
-
-async function getSiteConfig() {
-  const config = await prisma.siteConfig.findUnique({ where: { id: 1 } })
-  return config || { mode: 'TRAINING_BASIC' }
-}
-
-async function getTeamMembers() {
-  return await prisma.teamMember.findMany({ orderBy: { order: 'asc' } })
-}
-
-async function getSponsors() {
-  return await prisma.sponsor.findMany({ orderBy: { order: 'asc' } })
-}
-
-async function getQnaItems(mode: string) {
-  return await prisma.qnaItem.findMany({
-    where: {
-      OR: [
-        { mode: null },
-        { mode: mode as any }
-      ]
-    },
-    orderBy: { order: 'asc' }
-  })
-}
 
 const trainingDescriptions = {
   TRAINING_BASIC: {
@@ -51,13 +28,54 @@ const trainingDescriptions = {
   }
 }
 
-export default async function Home() {
-  const config = await getSiteConfig()
-  const teamMembers = await getTeamMembers()
-  const sponsors = await getSponsors()
-  const qnaItems = await getQnaItems(config.mode)
+export default function Home() {
+  const [config, setConfig] = useState<any>({ mode: 'TRAINING_BASIC' })
+  const [teamMembers, setTeamMembers] = useState<any[]>([])
+  const [sponsors, setSponsors] = useState<any[]>([])
+  const [qnaItems, setQnaItems] = useState<any[]>([])
+  const [isLoading, setIsLoading] = useState(true)
 
-  const content = trainingDescriptions[config.mode as keyof typeof trainingDescriptions]
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const [configRes, teamRes, sponsorsRes, qnaRes] = await Promise.all([
+          fetch('/api/config'),
+          fetch('/api/team'),
+          fetch('/api/sponsors'),
+          fetch('/api/qna')
+        ])
+
+        const configData = await configRes.json()
+        const teamData = await teamRes.json()
+        const sponsorsData = await sponsorsRes.json()
+        const qnaData = await qnaRes.json()
+
+        setConfig(configData || { mode: 'TRAINING_BASIC' })
+        setTeamMembers(teamData)
+        setSponsors(sponsorsData)
+        setQnaItems(qnaData)
+      } catch (error) {
+        console.error('Failed to fetch data:', error)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    fetchData()
+  }, [])
+
+  const content = trainingDescriptions[config.mode as keyof typeof trainingDescriptions] || trainingDescriptions.TRAINING_BASIC
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading...</p>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="min-h-screen">
