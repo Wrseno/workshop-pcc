@@ -1,0 +1,100 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Registration {
+  id                    String               @id @default(cuid())
+  namaLengkap           String
+  nim                   String               @unique
+  programStudi          String
+  jurusan               String
+  pilihanPelatihan      TrainingType?
+  noWa                  String
+  buktiFollowPdfUrl     String
+  status                RegistrationStatus   @default(PENDING)
+  createdAt             DateTime             @default(now())
+  updatedAt             DateTime             @updatedAt
+}
+
+enum RegistrationStatus {
+  PENDING
+  VERIFY
+  REJECT
+}
+
+enum TrainingType {
+  SOFTWARE
+  NETWORK
+  MULTIMEDIA
+}
+
+model SiteConfig {
+  id                  Int      @id @default(1)
+  mode                SiteMode @default(TRAINING_BASIC)
+  maxQuotaSoftware    Int      @default(35)
+  maxQuotaNetwork     Int      @default(35)
+  maxQuotaMultimedia  Int      @default(35)
+}
+
+enum SiteMode {
+  TRAINING_BASIC
+  PCC_CLASS
+}
+
+model TeamMember {
+  id          String          @id @default(cuid())
+  name        String
+  position    String
+  avatarUrl   String?
+  description String?         @db.Text
+  type        TeamType        @default(DIVISI)
+  department  DepartmentType?
+  order       Int             @default(0)
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+}
+
+enum TeamType {
+  DIVISI
+  DEPARTEMEN
+}
+
+enum DepartmentType {
+  SOFTWARE
+  NETWORK
+  MULTIMEDIA
+}
+
+model Sponsor {
+  id        String   @id @default(cuid())
+  name      String
+  logoUrl   String?
+  linkUrl   String?
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model QnaItem {
+  id        String    @id @default(cuid())
+  question  String
+  answer    String    @db.Text
+  mode      SiteMode?
+  order     Int       @default(0)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Admin {
+  id        String   @id @default(cuid())
+  username  String   @unique
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
