@@ -15,16 +15,34 @@ const trainingDescriptions = {
   TRAINING_BASIC: {
     title: 'Training Basic - Divisi Workshop UKM PCC',
     description: 'Program pelatihan dasar untuk mengembangkan keterampilan teknis di bidang IT',
-    software: 'Pelajari dasar-dasar pemrograman, pengembangan web, dan aplikasi desktop',
-    network: 'Memahami konsep jaringan komputer, konfigurasi, dan keamanan jaringan',
-    multimedia: 'Menguasai desain grafis, ui/ux desain, dan produksi konten multimedia'
+    software: {
+      description: 'Pelajari dasar-dasar pemrograman, pengembangan web, dan aplikasi desktop',
+      theme: '"Membuat Landing Page Bisnis Kopi"',
+    },
+    network: {
+      description: 'Memahami konsep jaringan komputer, konfigurasi, dan keamanan jaringan',
+      theme: '"Network Fundamental, Basic Configuration, and Routing Basic"',
+    },
+    multimedia: {
+      description: 'Menguasai desain grafis, ui/ux desain, dan produksi konten multimedia',
+      theme: '"PCC Maintenance Store - Mobile App UI Design"',
+    }
   },
   PCC_CLASS: {
     title: 'PCC Class - Program Pengembangan Lanjutan',
     description: 'Program lanjutan untuk meningkatkan keahlian dan sertifikasi profesional',
-    software: 'Pengembangan software tingkat lanjut dengan framework modern dan best practices',
-    network: 'Administrasi jaringan enterprise, troubleshooting, dan network security',
-    multimedia: 'Produksi multimedia profesional untuk industri kreatif dan broadcasting'
+    software: {
+      description: 'Pengembangan software tingkat lanjut dengan framework modern dan best practices',
+      theme: 'Membangun aplikasi skala besar dengan arsitektur modern',
+    },
+    network: {
+      description: 'Administrasi jaringan enterprise, troubleshooting, dan network security',
+      theme: 'Mengamankan dan mengelola infrastruktur jaringan kompleks',
+    },
+    multimedia: {
+      description: 'Produksi multimedia profesional untuk industri kreatif dan broadcasting',
+      theme: 'Menciptakan konten visual berkualitas tinggi standar industri',
+    }
   }
 }
 

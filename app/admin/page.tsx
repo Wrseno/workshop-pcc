@@ -200,65 +200,65 @@ export default function AdminDashboard() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50">
+      <div className="flex items-center justify-center min-h-screen bg-[#030712] bg-grid-white/[0.02]">
         <div className="text-center">
-          <div className="w-16 h-16 border-4 border-purple-200 border-t-purple-600 rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-gray-600 font-medium">Loading Dashboard...</p>
+          <div className="w-16 h-16 border-4 border-gray-800 border-t-purple-500 rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-400 font-mono">INITIALIZING_DASHBOARD...</p>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 p-4 md:p-8">
+    <div className="min-h-screen bg-[#030712] bg-grid-white/[0.02] p-4 md:p-8 text-white font-sans">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4 border-b border-gray-800 pb-8">
           <div>
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent mb-2">
-              Admin Dashboard
+            <h1 className="text-4xl font-bold font-mono text-white mb-2">
+              ADMIN_DASHBOARD
             </h1>
-            <p className="text-gray-600">Kelola data workshop PCC</p>
+            <p className="text-gray-400 font-mono text-sm">./manage_workshop_data.sh</p>
           </div>
           <Button 
             variant="outline" 
             onClick={() => signOut()}
-            className="border-2 hover:bg-red-50 hover:border-red-300 hover:text-red-600 transition-all"
+            className="bg-[#111] border-gray-800 text-red-400 hover:bg-red-900/20 hover:text-red-300 hover:border-red-900 font-mono"
           >
             <LogOut className="w-4 h-4 mr-2" />
-            Logout
+            LOGOUT_SESSION
           </Button>
         </div>
 
         <Tabs defaultValue="registrations" className="space-y-6">
-          <TabsList className="bg-white shadow-md border-0 p-1.5 h-auto">
+          <TabsList className="bg-[#0a0a0a] border border-gray-800 p-1.5 h-auto">
             <TabsTrigger 
               value="registrations"
-              className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:to-purple-500 data-[state=active]:text-white px-6 py-3 font-semibold rounded-lg transition-all"
+              className="data-[state=active]:bg-blue-600 data-[state=active]:text-white text-gray-400 px-6 py-3 font-mono rounded-md transition-all"
             >
-              Pendaftaran
+              REGISTRATIONS
             </TabsTrigger>
             <TabsTrigger 
               value="config"
-              className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:to-purple-500 data-[state=active]:text-white px-6 py-3 font-semibold rounded-lg transition-all"
+              className="data-[state=active]:bg-purple-600 data-[state=active]:text-white text-gray-400 px-6 py-3 font-mono rounded-md transition-all"
             >
-              Konfigurasi
+              CONFIG
             </TabsTrigger>
             <TabsTrigger 
               value="team"
-              className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:to-purple-500 data-[state=active]:text-white px-6 py-3 font-semibold rounded-lg transition-all"
+              className="data-[state=active]:bg-green-600 data-[state=active]:text-white text-gray-400 px-6 py-3 font-mono rounded-md transition-all"
             >
-              Tim
+              TEAM
             </TabsTrigger>
             <TabsTrigger 
               value="sponsors"
-              className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:to-purple-500 data-[state=active]:text-white px-6 py-3 font-semibold rounded-lg transition-all"
+              className="data-[state=active]:bg-yellow-600 data-[state=active]:text-white text-gray-400 px-6 py-3 font-mono rounded-md transition-all"
             >
-              Sponsor
+              SPONSORS
             </TabsTrigger>
             <TabsTrigger 
               value="qna"
-              className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:to-purple-500 data-[state=active]:text-white px-6 py-3 font-semibold rounded-lg transition-all"
+              className="data-[state=active]:bg-pink-600 data-[state=active]:text-white text-gray-400 px-6 py-3 font-mono rounded-md transition-all"
             >
               QnA
             </TabsTrigger>
@@ -266,52 +266,52 @@ export default function AdminDashboard() {
 
           {/* Registrations Tab */}
           <TabsContent value="registrations">
-            <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm">
-              <CardHeader className="border-b bg-gradient-to-r from-blue-50 to-purple-50">
-                <CardTitle className="text-2xl">Manajemen Pendaftaran</CardTitle>
-                <div className="flex flex-wrap gap-3 mt-2">
-                  <span className="px-3 py-1 bg-gray-100 rounded-full text-gray-700 font-medium text-sm">
-                    Total: <strong>{registrations.length}</strong>
+            <Card className="border border-gray-800 bg-[#0a0a0a] shadow-xl">
+              <CardHeader className="border-b border-gray-800 bg-[#0a0a0a]">
+                <CardTitle className="text-2xl font-mono text-white">REGISTRATION_MANAGEMENT</CardTitle>
+                <div className="flex flex-wrap gap-3 mt-2 font-mono text-xs">
+                  <span className="px-3 py-1 bg-gray-900 border border-gray-800 rounded-sm text-gray-300">
+                    TOTAL: <strong className="text-white">{registrations.length}</strong>
                   </span>
-                  <span className="px-3 py-1 bg-yellow-100 rounded-full text-yellow-700 font-medium text-sm">
-                    Pending: <strong>{registrations.filter(r => r.status === 'PENDING').length}</strong>
+                  <span className="px-3 py-1 bg-yellow-900/20 border border-yellow-900/50 rounded-sm text-yellow-500">
+                    PENDING: <strong className="text-yellow-400">{registrations.filter(r => r.status === 'PENDING').length}</strong>
                   </span>
-                  <span className="px-3 py-1 bg-green-100 rounded-full text-green-700 font-medium text-sm">
-                    Verified: <strong>{registrations.filter(r => r.status === 'VERIFY').length}</strong>
+                  <span className="px-3 py-1 bg-green-900/20 border border-green-900/50 rounded-sm text-green-500">
+                    VERIFIED: <strong className="text-green-400">{registrations.filter(r => r.status === 'VERIFY').length}</strong>
                   </span>
-                  <span className="px-3 py-1 bg-red-100 rounded-full text-red-700 font-medium text-sm">
-                    Rejected: <strong>{registrations.filter(r => r.status === 'REJECT').length}</strong>
+                  <span className="px-3 py-1 bg-red-900/20 border border-red-900/50 rounded-sm text-red-500">
+                    REJECTED: <strong className="text-red-400">{registrations.filter(r => r.status === 'REJECT').length}</strong>
                   </span>
                 </div>
               </CardHeader>
-              <CardContent className="p-6">
+              <CardContent className="p-6 bg-[#0a0a0a]">
                 <div className="overflow-x-auto">
                   <Table>
                   <TableHeader>
-                    <TableRow>
-                      <TableHead>Nama</TableHead>
-                      <TableHead>NIM</TableHead>
-                      <TableHead>Prodi</TableHead>
-                      <TableHead>Jurusan</TableHead>
-                      <TableHead>Pelatihan</TableHead>
-                      <TableHead>WhatsApp</TableHead>
-                      <TableHead>Bukti PDF</TableHead>
-                      <TableHead>Status</TableHead>
-                      <TableHead>Aksi</TableHead>
+                    <TableRow className="border-gray-800 hover:bg-transparent">
+                      <TableHead className="font-mono text-gray-400">NAME</TableHead>
+                      <TableHead className="font-mono text-gray-400">NIM</TableHead>
+                      <TableHead className="font-mono text-gray-400">PRODI</TableHead>
+                      <TableHead className="font-mono text-gray-400">MAJOR</TableHead>
+                      <TableHead className="font-mono text-gray-400">TRAINING</TableHead>
+                      <TableHead className="font-mono text-gray-400">WHATSAPP</TableHead>
+                      <TableHead className="font-mono text-gray-400">PROOF_PDF</TableHead>
+                      <TableHead className="font-mono text-gray-400">STATUS</TableHead>
+                      <TableHead className="font-mono text-gray-400">ACTION</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {registrations.map((reg) => (
-                      <TableRow key={reg.id}>
-                        <TableCell className="font-medium">{reg.namaLengkap}</TableCell>
-                        <TableCell>{reg.nim}</TableCell>
-                        <TableCell>{reg.programStudi}</TableCell>
-                        <TableCell>{reg.jurusan}</TableCell>
-                        <TableCell>{reg.pilihanPelatihan || '-'}</TableCell>
-                        <TableCell>{reg.noWa}</TableCell>
+                      <TableRow key={reg.id} className="border-gray-800 hover:bg-gray-900/50 transition">
+                        <TableCell className="font-medium font-mono text-white">{reg.namaLengkap}</TableCell>
+                        <TableCell className="font-mono text-gray-400">{reg.nim}</TableCell>
+                        <TableCell className="font-mono text-gray-400">{reg.programStudi}</TableCell>
+                        <TableCell className="font-mono text-gray-400">{reg.jurusan}</TableCell>
+                        <TableCell className="font-mono text-blue-400">{reg.pilihanPelatihan || '-'}</TableCell>
+                        <TableCell className="font-mono text-gray-400">{reg.noWa}</TableCell>
                         <TableCell>
                           <a href={reg.buktiFollowPdfUrl} target="_blank" rel="noopener noreferrer">
-                            <Button variant="ghost" size="sm" className="hover:bg-blue-50 hover:text-blue-600">
+                            <Button variant="ghost" size="sm" className="hover:bg-blue-900/20 hover:text-blue-400 text-gray-400">
                               <ExternalLink className="w-4 h-4" />
                             </Button>
                           </a>
@@ -324,7 +324,7 @@ export default function AdminDashboard() {
                               variant="outline"
                               onClick={() => updateRegistrationStatus(reg.id, 'VERIFY')}
                               disabled={reg.status === 'VERIFY'}
-                              className="border-green-200 text-green-600 hover:bg-green-50 hover:border-green-300 disabled:opacity-50"
+                              className="bg-[#111] border-green-900/50 text-green-500 hover:bg-green-900/20 hover:border-green-500 disabled:opacity-30 disabled:bg-transparent"
                             >
                               <CheckCircle2 className="w-4 h-4" />
                             </Button>
@@ -333,7 +333,7 @@ export default function AdminDashboard() {
                               variant="outline"
                               onClick={() => updateRegistrationStatus(reg.id, 'REJECT')}
                               disabled={reg.status === 'REJECT'}
-                              className="border-red-200 text-red-600 hover:bg-red-50 hover:border-red-300 disabled:opacity-50"
+                              className="bg-[#111] border-red-900/50 text-red-500 hover:bg-red-900/20 hover:border-red-500 disabled:opacity-30 disabled:bg-transparent"
                             >
                               <XCircle className="w-4 h-4" />
                             </Button>
@@ -350,27 +350,27 @@ export default function AdminDashboard() {
 
           {/* Configuration Tab */}
           <TabsContent value="config">
-            <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm">
-              <CardHeader className="border-b bg-gradient-to-r from-blue-50 to-purple-50">
-                <CardTitle className="text-2xl">Mode Website</CardTitle>
-                <CardDescription className="text-base">Ubah mode tampilan website</CardDescription>
+            <Card className="border border-gray-800 bg-[#0a0a0a] shadow-xl">
+              <CardHeader className="border-b border-gray-800 bg-[#0a0a0a]">
+                <CardTitle className="text-2xl font-mono text-white">SYSTEM_CONFIGURATION</CardTitle>
+                <CardDescription className="text-gray-400 font-mono text-xs">./configure_site_mode.sh</CardDescription>
               </CardHeader>
-              <CardContent className="p-6">
+              <CardContent className="p-6 bg-[#0a0a0a]">
                 <div className="space-y-4">
-                  <Label className="text-base font-semibold">Pilih Mode</Label>
+                  <Label className="text-xs font-mono text-gray-400">SELECT_MODE</Label>
                   <Select value={siteMode} onValueChange={(value) => updateSiteMode(value as SiteMode)}>
-                    <SelectTrigger className="h-12 text-base">
+                    <SelectTrigger className="h-12 bg-[#111] border-gray-800 text-white font-mono">
                       <SelectValue />
                     </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="TRAINING_BASIC">Training Basic</SelectItem>
-                      <SelectItem value="PCC_CLASS">PCC Class</SelectItem>
+                    <SelectContent className="bg-[#0a0a0a] border-gray-800 text-white">
+                      <SelectItem value="TRAINING_BASIC" className="focus:bg-gray-800 focus:text-white font-mono">TRAINING_BASIC</SelectItem>
+                      <SelectItem value="PCC_CLASS" className="focus:bg-gray-800 focus:text-white font-mono">PCC_CLASS</SelectItem>
                     </SelectContent>
                   </Select>
-                  <div className="mt-4 p-4 bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg border border-blue-200">
-                    <p className="text-sm font-medium text-gray-700">
-                      Mode saat ini: <span className="px-3 py-1 bg-white rounded-full text-purple-600 font-bold">
-                        {siteMode === 'TRAINING_BASIC' ? 'Training Basic' : 'PCC Class'}
+                  <div className="mt-4 p-4 bg-blue-900/10 rounded-lg border border-blue-900/30">
+                    <p className="text-sm font-mono text-blue-400">
+                      CURRENT_MODE: <span className="px-3 py-1 bg-blue-900/30 rounded-sm text-blue-300 font-bold ml-2 border border-blue-800">
+                        {siteMode === 'TRAINING_BASIC' ? 'TRAINING_BASIC' : 'PCC_CLASS'}
                       </span>
                     </p>
                   </div>
@@ -381,42 +381,42 @@ export default function AdminDashboard() {
 
           {/* Team Tab */}
           <TabsContent value="team">
-            <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm">
-              <CardHeader className="border-b bg-gradient-to-r from-blue-50 to-purple-50">
-                <CardTitle className="text-2xl">Manajemen Tim</CardTitle>
-                <CardDescription className="text-base">Kelola anggota Divisi Workshop dan Departemen</CardDescription>
+            <Card className="border border-gray-800 bg-[#0a0a0a] shadow-xl">
+              <CardHeader className="border-b border-gray-800 bg-[#0a0a0a]">
+                <CardTitle className="text-2xl font-mono text-white">TEAM_MANAGEMENT</CardTitle>
+                <CardDescription className="text-gray-400 font-mono text-xs">./manage_personnel.sh</CardDescription>
               </CardHeader>
-              <CardContent className="p-6">
+              <CardContent className="p-6 bg-[#0a0a0a]">
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
                   <AddTeamMemberDialog onSuccess={fetchData} />
                   
                   {/* Filter */}
                   <div className="flex items-center gap-2">
-                    <Label className="text-sm font-semibold">Filter:</Label>
+                    <Label className="text-xs font-mono text-gray-400">FILTER:</Label>
                     <div className="flex gap-2">
                       <Button
                         variant={teamFilter === 'ALL' ? 'default' : 'outline'}
                         size="sm"
                         onClick={() => handleFilterChange('ALL')}
-                        className={teamFilter === 'ALL' ? 'bg-gradient-to-r from-blue-500 to-purple-500' : ''}
+                        className={teamFilter === 'ALL' ? 'bg-blue-600 text-white border-0 font-mono' : 'bg-[#111] border-gray-800 text-gray-400 hover:text-white font-mono'}
                       >
-                        Semua ({teamMembers.length})
+                        ALL ({teamMembers.length})
                       </Button>
                       <Button
                         variant={teamFilter === 'DIVISI' ? 'default' : 'outline'}
                         size="sm"
                         onClick={() => handleFilterChange('DIVISI')}
-                        className={teamFilter === 'DIVISI' ? 'bg-gradient-to-r from-blue-500 to-cyan-500' : ''}
+                        className={teamFilter === 'DIVISI' ? 'bg-cyan-600 text-white border-0 font-mono' : 'bg-[#111] border-gray-800 text-gray-400 hover:text-white font-mono'}
                       >
-                        Divisi ({teamMembers.filter(m => m.type === 'DIVISI').length})
+                        DIVISION ({teamMembers.filter(m => m.type === 'DIVISI').length})
                       </Button>
                       <Button
                         variant={teamFilter === 'DEPARTEMEN' ? 'default' : 'outline'}
                         size="sm"
                         onClick={() => handleFilterChange('DEPARTEMEN')}
-                        className={teamFilter === 'DEPARTEMEN' ? 'bg-gradient-to-r from-purple-500 to-pink-500' : ''}
+                        className={teamFilter === 'DEPARTEMEN' ? 'bg-purple-600 text-white border-0 font-mono' : 'bg-[#111] border-gray-800 text-gray-400 hover:text-white font-mono'}
                       >
-                        Departemen ({teamMembers.filter(m => m.type === 'DEPARTEMEN').length})
+                        DEPARTMENT ({teamMembers.filter(m => m.type === 'DEPARTEMEN').length})
                       </Button>
                     </div>
                   </div>
@@ -426,35 +426,35 @@ export default function AdminDashboard() {
                 {teamFilter === 'DIVISI' || teamFilter === 'ALL' ? (
                   <div className="mb-8">
                     <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-                      <Badge variant="secondary" className="bg-blue-100 text-blue-700">Divisi Workshop</Badge>
+                      <Badge variant="secondary" className="bg-blue-900/20 text-blue-400 border border-blue-900/50 font-mono">WORKSHOP_DIVISION</Badge>
                     </h3>
                     <Table>
                       <TableHeader>
-                        <TableRow>
-                          <TableHead>Foto</TableHead>
-                          <TableHead>Nama</TableHead>
-                          <TableHead>Jabatan</TableHead>
-                          <TableHead>Deskripsi</TableHead>
-                          <TableHead>Order</TableHead>
-                          <TableHead>Aksi</TableHead>
+                        <TableRow className="border-gray-800 hover:bg-transparent">
+                          <TableHead className="font-mono text-gray-400">PHOTO</TableHead>
+                          <TableHead className="font-mono text-gray-400">NAME</TableHead>
+                          <TableHead className="font-mono text-gray-400">POSITION</TableHead>
+                          <TableHead className="font-mono text-gray-400">DESCRIPTION</TableHead>
+                          <TableHead className="font-mono text-gray-400">ORDER</TableHead>
+                          <TableHead className="font-mono text-gray-400">ACTION</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
                         {paginatedTeamMembers.filter(m => m.type === 'DIVISI').map((member) => (
-                          <TableRow key={member.id}>
+                          <TableRow key={member.id} className="border-gray-800 hover:bg-gray-900/50 transition">
                             <TableCell>
                               {member.avatarUrl ? (
-                                <img src={member.avatarUrl} alt={member.name} className="w-12 h-12 rounded-full object-cover" />
+                                <img src={member.avatarUrl} alt={member.name} className="w-12 h-12 rounded-sm object-cover border border-gray-700" />
                               ) : (
-                                <div className="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center">
-                                  <span className="text-sm font-semibold">{member.name.charAt(0)}</span>
+                                <div className="w-12 h-12 rounded-sm bg-[#111] border border-gray-800 flex items-center justify-center">
+                                  <span className="text-sm font-mono text-gray-500">{member.name.charAt(0)}</span>
                                 </div>
                               )}
                             </TableCell>
-                            <TableCell className="font-medium">{member.name}</TableCell>
-                            <TableCell>{member.position}</TableCell>
-                            <TableCell className="max-w-xs truncate">{member.description || '-'}</TableCell>
-                            <TableCell>{member.order}</TableCell>
+                            <TableCell className="font-medium font-mono text-white">{member.name}</TableCell>
+                            <TableCell className="font-mono text-blue-400">{member.position}</TableCell>
+                            <TableCell className="max-w-xs truncate font-mono text-gray-400">{member.description || '-'}</TableCell>
+                            <TableCell className="font-mono text-gray-400">{member.order}</TableCell>
                             <TableCell>
                               <div className="flex gap-2">
                                 <EditTeamMemberDialog member={member} onSuccess={fetchData} />
@@ -462,6 +462,7 @@ export default function AdminDashboard() {
                                   size="sm"
                                   variant="outline"
                                   onClick={() => deleteTeamMember(member.id)}
+                                  className="bg-[#111] border-red-900/50 text-red-500 hover:bg-red-900/20 hover:border-red-500"
                                 >
                                   <Trash2 className="w-4 h-4" />
                                 </Button>
@@ -471,8 +472,8 @@ export default function AdminDashboard() {
                         ))}
                         {paginatedTeamMembers.filter(m => m.type === 'DIVISI').length === 0 && (
                           <TableRow>
-                            <TableCell colSpan={6} className="text-center text-muted-foreground py-8">
-                              {teamFilter === 'DIVISI' ? 'Belum ada anggota divisi' : 'Tidak ada hasil pada halaman ini'}
+                            <TableCell colSpan={6} className="text-center text-gray-500 py-8 font-mono">
+                              {teamFilter === 'DIVISI' ? 'No division members yet' : 'No results on this page'}
                             </TableCell>
                           </TableRow>
                         )}
@@ -485,24 +486,24 @@ export default function AdminDashboard() {
                 {teamFilter === 'DEPARTEMEN' || teamFilter === 'ALL' ? (
                   <div>
                     <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-                      <Badge variant="secondary" className="bg-purple-100 text-purple-700">Anggota Departemen</Badge>
+                      <Badge variant="secondary" className="bg-purple-900/20 text-purple-400 border border-purple-900/50 font-mono">DEPARTMENT_MEMBERS</Badge>
                     </h3>
                     <div className="grid md:grid-cols-2 gap-4">
                       {paginatedTeamMembers.filter(m => m.type === 'DEPARTEMEN').map((member) => (
-                        <Card key={member.id} className="border-2">
+                        <Card key={member.id} className="border border-gray-800 bg-[#111] hover:border-purple-500/50 transition-all">
                           <CardContent className="p-4">
                             <div className="flex gap-4">
                               {member.avatarUrl ? (
-                                <img src={member.avatarUrl} alt={member.name} className="w-24 h-24 rounded-lg object-cover" />
+                                <img src={member.avatarUrl} alt={member.name} className="w-24 h-24 rounded-sm object-cover border border-gray-700" />
                               ) : (
-                                <div className="w-24 h-24 rounded-lg bg-gray-200 flex items-center justify-center">
-                                  <span className="text-2xl font-bold">{member.name.charAt(0)}</span>
+                                <div className="w-24 h-24 rounded-sm bg-[#0a0a0a] border border-gray-800 flex items-center justify-center">
+                                  <span className="text-2xl font-bold font-mono text-gray-600">{member.name.charAt(0)}</span>
                                 </div>
                               )}
                               <div className="flex-1">
-                                <h4 className="font-semibold text-lg">{member.name}</h4>
-                                <p className="text-sm text-muted-foreground mb-2">{member.position}</p>
-                                <p className="text-sm line-clamp-2">{member.description}</p>
+                                <h4 className="font-bold text-lg font-mono text-white">{member.name}</h4>
+                                <p className="text-sm text-purple-400 mb-2 font-mono">{member.position}</p>
+                                <p className="text-sm line-clamp-2 text-gray-400 font-mono text-xs">{member.description}</p>
                               </div>
                             </div>
                             <div className="flex gap-2 mt-4">
@@ -511,19 +512,19 @@ export default function AdminDashboard() {
                                 size="sm"
                                 variant="outline"
                                 onClick={() => deleteTeamMember(member.id)}
-                                className="flex-1"
+                                className="flex-1 bg-[#0a0a0a] border-red-900/50 text-red-500 hover:bg-red-900/20 hover:border-red-500 font-mono"
                               >
                                 <Trash2 className="w-4 h-4 mr-2" />
-                                Hapus
+                                DELETE
                               </Button>
                             </div>
                           </CardContent>
                         </Card>
                       ))}
                       {paginatedTeamMembers.filter(m => m.type === 'DEPARTEMEN').length === 0 && (
-                        <Card className="border-2 border-dashed">
-                          <CardContent className="p-8 text-center text-muted-foreground">
-                            {teamFilter === 'DEPARTEMEN' ? 'Belum ada anggota departemen' : 'Tidak ada hasil pada halaman ini'}
+                        <Card className="border border-dashed border-gray-800 bg-transparent">
+                          <CardContent className="p-8 text-center text-gray-500 font-mono">
+                            {teamFilter === 'DEPARTEMEN' ? 'No department members yet' : 'No results on this page'}
                           </CardContent>
                         </Card>
                       )}
@@ -533,9 +534,9 @@ export default function AdminDashboard() {
 
                 {/* Pagination */}
                 {totalPages > 1 && (
-                  <div className="flex items-center justify-between mt-6 pt-6 border-t">
-                    <p className="text-sm text-gray-600">
-                      Menampilkan {startIndex + 1} - {Math.min(startIndex + itemsPerPage, filteredTeamMembers.length)} dari {filteredTeamMembers.length} anggota
+                  <div className="flex items-center justify-between mt-6 pt-6 border-t border-gray-800">
+                    <p className="text-xs text-gray-500 font-mono">
+                      SHOWING {startIndex + 1} - {Math.min(startIndex + itemsPerPage, filteredTeamMembers.length)} OF {filteredTeamMembers.length} MEMBERS
                     </p>
                     <div className="flex items-center gap-2">
                       <Button
@@ -543,8 +544,9 @@ export default function AdminDashboard() {
                         size="sm"
                         onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
                         disabled={currentPage === 1}
+                        className="bg-[#111] border-gray-800 text-gray-400 hover:text-white hover:bg-gray-800 font-mono"
                       >
-                        Previous
+                        PREV
                       </Button>
                       
                       {/* Page Numbers */}
@@ -567,7 +569,7 @@ export default function AdminDashboard() {
                               variant={currentPage === pageNum ? 'default' : 'outline'}
                               size="sm"
                               onClick={() => setCurrentPage(pageNum)}
-                              className={currentPage === pageNum ? 'bg-gradient-to-r from-blue-500 to-purple-500' : ''}
+                              className={currentPage === pageNum ? 'bg-blue-600 text-white border-0 font-mono' : 'bg-[#111] border-gray-800 text-gray-400 hover:text-white hover:bg-gray-800 font-mono'}
                             >
                               {pageNum}
                             </Button>
@@ -580,8 +582,9 @@ export default function AdminDashboard() {
                         size="sm"
                         onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
                         disabled={currentPage === totalPages}
+                        className="bg-[#111] border-gray-800 text-gray-400 hover:text-white hover:bg-gray-800 font-mono"
                       >
-                        Next
+                        NEXT
                       </Button>
                     </div>
                   </div>
@@ -592,30 +595,30 @@ export default function AdminDashboard() {
 
           {/* Sponsors Tab */}
           <TabsContent value="sponsors">
-            <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm">
-              <CardHeader className="border-b bg-gradient-to-r from-blue-50 to-purple-50">
-                <CardTitle className="text-2xl">Manajemen Sponsor</CardTitle>
-                <CardDescription className="text-base">Kelola sponsor workshop</CardDescription>
+            <Card className="border border-gray-800 bg-[#0a0a0a] shadow-xl">
+              <CardHeader className="border-b border-gray-800 bg-[#0a0a0a]">
+                <CardTitle className="text-2xl font-mono text-white">SPONSOR_MANAGEMENT</CardTitle>
+                <CardDescription className="text-gray-400 font-mono text-xs">./manage_partners.sh</CardDescription>
               </CardHeader>
-              <CardContent className="p-6">
+              <CardContent className="p-6 bg-[#0a0a0a]">
                 <AddSponsorDialog onSuccess={fetchData} />
                 <Table className="mt-4">
                   <TableHeader>
-                    <TableRow>
-                      <TableHead>Nama</TableHead>
-                      <TableHead>Logo URL</TableHead>
-                      <TableHead>Link URL</TableHead>
-                      <TableHead>Order</TableHead>
-                      <TableHead>Aksi</TableHead>
+                    <TableRow className="border-gray-800 hover:bg-transparent">
+                      <TableHead className="font-mono text-gray-400">NAME</TableHead>
+                      <TableHead className="font-mono text-gray-400">LOGO_URL</TableHead>
+                      <TableHead className="font-mono text-gray-400">LINK_URL</TableHead>
+                      <TableHead className="font-mono text-gray-400">ORDER</TableHead>
+                      <TableHead className="font-mono text-gray-400">ACTION</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {sponsors.map((sponsor) => (
-                      <TableRow key={sponsor.id}>
-                        <TableCell>{sponsor.name}</TableCell>
-                        <TableCell className="max-w-xs truncate">{sponsor.logoUrl || '-'}</TableCell>
-                        <TableCell className="max-w-xs truncate">{sponsor.linkUrl || '-'}</TableCell>
-                        <TableCell>{sponsor.order}</TableCell>
+                      <TableRow key={sponsor.id} className="border-gray-800 hover:bg-gray-900/50 transition">
+                        <TableCell className="font-medium font-mono text-white">{sponsor.name}</TableCell>
+                        <TableCell className="max-w-xs truncate font-mono text-gray-400">{sponsor.logoUrl || '-'}</TableCell>
+                        <TableCell className="max-w-xs truncate font-mono text-blue-400">{sponsor.linkUrl || '-'}</TableCell>
+                        <TableCell className="font-mono text-gray-400">{sponsor.order}</TableCell>
                         <TableCell>
                           <div className="flex gap-2">
                             <EditSponsorDialog sponsor={sponsor} onSuccess={fetchData} />
@@ -623,6 +626,7 @@ export default function AdminDashboard() {
                               size="sm"
                               variant="outline"
                               onClick={() => deleteSponsor(sponsor.id)}
+                              className="bg-[#111] border-red-900/50 text-red-500 hover:bg-red-900/20 hover:border-red-500"
                             >
                               <Trash2 className="w-4 h-4" />
                             </Button>
@@ -638,30 +642,30 @@ export default function AdminDashboard() {
 
           {/* QnA Tab */}
           <TabsContent value="qna">
-            <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm">
-              <CardHeader className="border-b bg-gradient-to-r from-blue-50 to-purple-50">
-                <CardTitle className="text-2xl">Manajemen QnA</CardTitle>
-                <CardDescription className="text-base">Kelola pertanyaan dan jawaban</CardDescription>
+            <Card className="border border-gray-800 bg-[#0a0a0a] shadow-xl">
+              <CardHeader className="border-b border-gray-800 bg-[#0a0a0a]">
+                <CardTitle className="text-2xl font-mono text-white">QnA_MANAGEMENT</CardTitle>
+                <CardDescription className="text-gray-400 font-mono text-xs">./manage_faq.sh</CardDescription>
               </CardHeader>
-              <CardContent className="p-6">
+              <CardContent className="p-6 bg-[#0a0a0a]">
                 <AddQnaDialog onSuccess={fetchData} />
                 <Table className="mt-4">
                   <TableHeader>
-                    <TableRow>
-                      <TableHead>Pertanyaan</TableHead>
-                      <TableHead>Jawaban</TableHead>
-                      <TableHead>Mode</TableHead>
-                      <TableHead>Order</TableHead>
-                      <TableHead>Aksi</TableHead>
+                    <TableRow className="border-gray-800 hover:bg-transparent">
+                      <TableHead className="font-mono text-gray-400">QUESTION</TableHead>
+                      <TableHead className="font-mono text-gray-400">ANSWER</TableHead>
+                      <TableHead className="font-mono text-gray-400">MODE</TableHead>
+                      <TableHead className="font-mono text-gray-400">ORDER</TableHead>
+                      <TableHead className="font-mono text-gray-400">ACTION</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {qnaItems.map((item) => (
-                      <TableRow key={item.id}>
-                        <TableCell>{item.question}</TableCell>
-                        <TableCell className="max-w-xs truncate">{item.answer}</TableCell>
-                        <TableCell>{item.mode || 'All'}</TableCell>
-                        <TableCell>{item.order}</TableCell>
+                      <TableRow key={item.id} className="border-gray-800 hover:bg-gray-900/50 transition">
+                        <TableCell className="font-medium font-mono text-white">{item.question}</TableCell>
+                        <TableCell className="max-w-xs truncate font-mono text-gray-400">{item.answer}</TableCell>
+                        <TableCell className="font-mono text-blue-400">{item.mode || 'All'}</TableCell>
+                        <TableCell className="font-mono text-gray-400">{item.order}</TableCell>
                         <TableCell>
                           <div className="flex gap-2">
                             <EditQnaDialog item={item} onSuccess={fetchData} />
@@ -669,6 +673,7 @@ export default function AdminDashboard() {
                               size="sm"
                               variant="outline"
                               onClick={() => deleteQnaItem(item.id)}
+                              className="bg-[#111] border-red-900/50 text-red-500 hover:bg-red-900/20 hover:border-red-500"
                             >
                               <Trash2 className="w-4 h-4" />
                             </Button>
@@ -717,58 +722,59 @@ function AddTeamMemberDialog({ onSuccess }: { onSuccess: () => void }) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button><Plus className="w-4 h-4 mr-2" />Tambah Anggota</Button>
+        <Button className="bg-blue-600 hover:bg-blue-700 text-white font-mono border border-blue-500/50"><Plus className="w-4 h-4 mr-2" />ADD_MEMBER</Button>
       </DialogTrigger>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto bg-white">
-        <DialogHeader>
-          <DialogTitle>Tambah Anggota Tim</DialogTitle>
-          <DialogDescription>Tambahkan anggota divisi workshop atau departemen</DialogDescription>
+      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto bg-[#0a0a0a] border border-gray-800 text-white">
+        <DialogHeader className="border-b border-gray-800 pb-4">
+          <DialogTitle className="font-mono text-xl">ADD_TEAM_MEMBER</DialogTitle>
+          <DialogDescription className="font-mono text-gray-400 text-xs">./insert_new_personnel.sh</DialogDescription>
         </DialogHeader>
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4 mt-4">
           <div className="space-y-2">
-            <Label>Tipe Anggota *</Label>
+            <Label className="text-xs font-mono text-gray-400">MEMBER_TYPE *</Label>
             <Select value={formData.type} onValueChange={(value: TeamType) => setFormData({ ...formData, type: value })}>
-              <SelectTrigger>
+              <SelectTrigger className="bg-[#111] border-gray-800 text-white font-mono">
                 <SelectValue />
               </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="DIVISI">Divisi Workshop</SelectItem>
-                <SelectItem value="DEPARTEMEN">Anggota Departemen</SelectItem>
+              <SelectContent className="bg-[#0a0a0a] border-gray-800 text-white">
+                <SelectItem value="DIVISI" className="focus:bg-gray-800 focus:text-white font-mono">WORKSHOP_DIVISION</SelectItem>
+                <SelectItem value="DEPARTEMEN" className="focus:bg-gray-800 focus:text-white font-mono">DEPARTMENT_MEMBER</SelectItem>
               </SelectContent>
             </Select>
           </div>
           <div className="space-y-2">
-            <Label>Nama *</Label>
-            <Input required value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} placeholder="Nama lengkap" />
+            <Label className="text-xs font-mono text-gray-400">NAME *</Label>
+            <Input required value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} placeholder="Full name" className="bg-[#111] border-gray-800 text-white font-mono" />
           </div>
           <div className="space-y-2">
-            <Label>Jabatan *</Label>
-            <Input required value={formData.position} onChange={(e) => setFormData({ ...formData, position: e.target.value })} placeholder="Contoh: Ketua Divisi, Anggota" />
+            <Label className="text-xs font-mono text-gray-400">POSITION *</Label>
+            <Input required value={formData.position} onChange={(e) => setFormData({ ...formData, position: e.target.value })} placeholder="Ex: Head of Division" className="bg-[#111] border-gray-800 text-white font-mono" />
           </div>
           <div className="space-y-2">
-            <Label>Avatar URL</Label>
-            <Input value={formData.avatarUrl} onChange={(e) => setFormData({ ...formData, avatarUrl: e.target.value })} placeholder="https://example.com/photo.jpg" />
-            <p className="text-sm text-muted-foreground">URL foto anggota</p>
+            <Label className="text-xs font-mono text-gray-400">AVATAR_URL</Label>
+            <Input value={formData.avatarUrl} onChange={(e) => setFormData({ ...formData, avatarUrl: e.target.value })} placeholder="https://example.com/photo.jpg" className="bg-[#111] border-gray-800 text-white font-mono" />
+            <p className="text-xs text-gray-500 font-mono">Direct link to photo</p>
           </div>
           <div className="space-y-2">
-            <Label>Deskripsi {formData.type === 'DEPARTEMEN' && '*'}</Label>
+            <Label className="text-xs font-mono text-gray-400">DESCRIPTION {formData.type === 'DEPARTEMEN' && '*'}</Label>
             <Textarea 
               value={formData.description} 
               onChange={(e) => setFormData({ ...formData, description: e.target.value })} 
-              placeholder="Deskripsi singkat tentang anggota..."
+              placeholder="Short description..."
               rows={4}
               required={formData.type === 'DEPARTEMEN'}
+              className="bg-[#111] border-gray-800 text-white font-mono"
             />
-            <p className="text-sm text-muted-foreground">
-              {formData.type === 'DIVISI' ? 'Opsional untuk divisi' : 'Wajib untuk departemen'}
+            <p className="text-xs text-gray-500 font-mono">
+              {formData.type === 'DIVISI' ? 'Optional for division' : 'Required for department'}
             </p>
           </div>
           <div className="space-y-2">
-            <Label>Order (urutan tampil)</Label>
-            <Input type="number" value={formData.order} onChange={(e) => setFormData({ ...formData, order: parseInt(e.target.value) })} />
+            <Label className="text-xs font-mono text-gray-400">ORDER</Label>
+            <Input type="number" value={formData.order} onChange={(e) => setFormData({ ...formData, order: parseInt(e.target.value) })} className="bg-[#111] border-gray-800 text-white font-mono" />
           </div>
           <DialogFooter>
-            <Button type="submit">Simpan</Button>
+            <Button type="submit" className="bg-blue-600 hover:bg-blue-700 text-white font-mono">SAVE_MEMBER</Button>
           </DialogFooter>
         </form>
       </DialogContent>
@@ -784,7 +790,7 @@ function EditTeamMemberDialog({ member, onSuccess }: { member: TeamMember, onSuc
     avatarUrl: member.avatarUrl || '', 
     description: member.description || '',
     type: member.type,
-    order: member.order 
+    order: member.order
   })
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -805,55 +811,54 @@ function EditTeamMemberDialog({ member, onSuccess }: { member: TeamMember, onSuc
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button size="sm" variant="outline">
-          <Edit className="w-4 h-4" />
-        </Button>
+        <Button variant="ghost" size="sm" className="text-blue-400 hover:text-blue-300 hover:bg-blue-900/20"><Edit className="w-4 h-4" /></Button>
       </DialogTrigger>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto bg-white">
-        <DialogHeader>
-          <DialogTitle>Edit Anggota Tim</DialogTitle>
-          <DialogDescription>Perbarui informasi anggota</DialogDescription>
+      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto bg-[#0a0a0a] border border-gray-800 text-white">
+        <DialogHeader className="border-b border-gray-800 pb-4">
+          <DialogTitle className="font-mono text-xl">EDIT_TEAM_MEMBER</DialogTitle>
+          <DialogDescription className="font-mono text-gray-400 text-xs">./update_personnel_data.sh</DialogDescription>
         </DialogHeader>
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4 mt-4">
           <div className="space-y-2">
-            <Label>Tipe Anggota *</Label>
+            <Label className="text-xs font-mono text-gray-400">MEMBER_TYPE *</Label>
             <Select value={formData.type} onValueChange={(value: TeamType) => setFormData({ ...formData, type: value })}>
-              <SelectTrigger>
+              <SelectTrigger className="bg-[#111] border-gray-800 text-white font-mono">
                 <SelectValue />
               </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="DIVISI">Divisi Workshop</SelectItem>
-                <SelectItem value="DEPARTEMEN">Anggota Departemen</SelectItem>
+              <SelectContent className="bg-[#0a0a0a] border-gray-800 text-white">
+                <SelectItem value="DIVISI" className="focus:bg-gray-800 focus:text-white font-mono">WORKSHOP_DIVISION</SelectItem>
+                <SelectItem value="DEPARTEMEN" className="focus:bg-gray-800 focus:text-white font-mono">DEPARTMENT_MEMBER</SelectItem>
               </SelectContent>
             </Select>
           </div>
           <div className="space-y-2">
-            <Label>Nama *</Label>
-            <Input required value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} />
+            <Label className="text-xs font-mono text-gray-400">NAME *</Label>
+            <Input required value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} className="bg-[#111] border-gray-800 text-white font-mono" />
           </div>
           <div className="space-y-2">
-            <Label>Jabatan *</Label>
-            <Input required value={formData.position} onChange={(e) => setFormData({ ...formData, position: e.target.value })} />
+            <Label className="text-xs font-mono text-gray-400">POSITION *</Label>
+            <Input required value={formData.position} onChange={(e) => setFormData({ ...formData, position: e.target.value })} className="bg-[#111] border-gray-800 text-white font-mono" />
           </div>
           <div className="space-y-2">
-            <Label>Avatar URL</Label>
-            <Input value={formData.avatarUrl} onChange={(e) => setFormData({ ...formData, avatarUrl: e.target.value })} />
+            <Label className="text-xs font-mono text-gray-400">AVATAR_URL</Label>
+            <Input value={formData.avatarUrl} onChange={(e) => setFormData({ ...formData, avatarUrl: e.target.value })} className="bg-[#111] border-gray-800 text-white font-mono" />
           </div>
           <div className="space-y-2">
-            <Label>Deskripsi {formData.type === 'DEPARTEMEN' && '*'}</Label>
+            <Label className="text-xs font-mono text-gray-400">DESCRIPTION {formData.type === 'DEPARTEMEN' && '*'}</Label>
             <Textarea 
               value={formData.description} 
               onChange={(e) => setFormData({ ...formData, description: e.target.value })} 
               rows={4}
               required={formData.type === 'DEPARTEMEN'}
+              className="bg-[#111] border-gray-800 text-white font-mono"
             />
           </div>
           <div className="space-y-2">
-            <Label>Order</Label>
-            <Input type="number" value={formData.order} onChange={(e) => setFormData({ ...formData, order: parseInt(e.target.value) })} />
+            <Label className="text-xs font-mono text-gray-400">ORDER</Label>
+            <Input type="number" value={formData.order} onChange={(e) => setFormData({ ...formData, order: parseInt(e.target.value) })} className="bg-[#111] border-gray-800 text-white font-mono" />
           </div>
           <DialogFooter>
-            <Button type="submit">Update</Button>
+            <Button type="submit" className="bg-blue-600 hover:bg-blue-700 text-white font-mono">UPDATE_MEMBER</Button>
           </DialogFooter>
         </form>
       </DialogContent>
@@ -884,31 +889,32 @@ function AddSponsorDialog({ onSuccess }: { onSuccess: () => void }) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button><Plus className="w-4 h-4 mr-2" />Tambah Sponsor</Button>
+        <Button className="bg-blue-600 hover:bg-blue-700 text-white font-mono border border-blue-500/50"><Plus className="w-4 h-4 mr-2" />ADD_SPONSOR</Button>
       </DialogTrigger>
-      <DialogContent className="bg-white">
-        <DialogHeader>
-          <DialogTitle>Tambah Sponsor</DialogTitle>
+      <DialogContent className="bg-[#0a0a0a] border border-gray-800 text-white">
+        <DialogHeader className="border-b border-gray-800 pb-4">
+          <DialogTitle className="font-mono text-xl">ADD_SPONSOR</DialogTitle>
+          <DialogDescription className="font-mono text-gray-400 text-xs">./insert_sponsor.sh</DialogDescription>
         </DialogHeader>
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4 mt-4">
           <div className="space-y-2">
-            <Label>Nama</Label>
-            <Input required value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} />
+            <Label className="text-xs font-mono text-gray-400">NAME *</Label>
+            <Input required value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} className="bg-[#111] border-gray-800 text-white font-mono" />
           </div>
           <div className="space-y-2">
-            <Label>Logo URL</Label>
-            <Input value={formData.logoUrl} onChange={(e) => setFormData({ ...formData, logoUrl: e.target.value })} />
+            <Label className="text-xs font-mono text-gray-400">LOGO_URL</Label>
+            <Input value={formData.logoUrl} onChange={(e) => setFormData({ ...formData, logoUrl: e.target.value })} className="bg-[#111] border-gray-800 text-white font-mono" />
           </div>
           <div className="space-y-2">
-            <Label>Link URL</Label>
-            <Input value={formData.linkUrl} onChange={(e) => setFormData({ ...formData, linkUrl: e.target.value })} />
+            <Label className="text-xs font-mono text-gray-400">LINK_URL</Label>
+            <Input value={formData.linkUrl} onChange={(e) => setFormData({ ...formData, linkUrl: e.target.value })} className="bg-[#111] border-gray-800 text-white font-mono" />
           </div>
           <div className="space-y-2">
-            <Label>Order</Label>
-            <Input type="number" value={formData.order} onChange={(e) => setFormData({ ...formData, order: parseInt(e.target.value) })} />
+            <Label className="text-xs font-mono text-gray-400">ORDER</Label>
+            <Input type="number" value={formData.order} onChange={(e) => setFormData({ ...formData, order: parseInt(e.target.value) })} className="bg-[#111] border-gray-800 text-white font-mono" />
           </div>
           <DialogFooter>
-            <Button type="submit">Simpan</Button>
+            <Button type="submit" className="bg-blue-600 hover:bg-blue-700 text-white font-mono">SAVE_SPONSOR</Button>
           </DialogFooter>
         </form>
       </DialogContent>
@@ -943,33 +949,34 @@ function EditSponsorDialog({ sponsor, onSuccess }: { sponsor: Sponsor, onSuccess
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button size="sm" variant="outline">
+        <Button size="sm" variant="ghost" className="text-blue-400 hover:text-blue-300 hover:bg-blue-900/20">
           <Edit className="w-4 h-4" />
         </Button>
       </DialogTrigger>
-      <DialogContent className="bg-white">
-        <DialogHeader>
-          <DialogTitle>Edit Sponsor</DialogTitle>
+      <DialogContent className="bg-[#0a0a0a] border border-gray-800 text-white">
+        <DialogHeader className="border-b border-gray-800 pb-4">
+          <DialogTitle className="font-mono text-xl">EDIT_SPONSOR</DialogTitle>
+          <DialogDescription className="font-mono text-gray-400 text-xs">./update_sponsor_data.sh</DialogDescription>
         </DialogHeader>
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4 mt-4">
           <div className="space-y-2">
-            <Label>Nama</Label>
-            <Input required value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} />
+            <Label className="text-xs font-mono text-gray-400">NAME *</Label>
+            <Input required value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} className="bg-[#111] border-gray-800 text-white font-mono" />
           </div>
           <div className="space-y-2">
-            <Label>Logo URL</Label>
-            <Input value={formData.logoUrl} onChange={(e) => setFormData({ ...formData, logoUrl: e.target.value })} />
+            <Label className="text-xs font-mono text-gray-400">LOGO_URL</Label>
+            <Input value={formData.logoUrl} onChange={(e) => setFormData({ ...formData, logoUrl: e.target.value })} className="bg-[#111] border-gray-800 text-white font-mono" />
           </div>
           <div className="space-y-2">
-            <Label>Link URL</Label>
-            <Input value={formData.linkUrl} onChange={(e) => setFormData({ ...formData, linkUrl: e.target.value })} />
+            <Label className="text-xs font-mono text-gray-400">LINK_URL</Label>
+            <Input value={formData.linkUrl} onChange={(e) => setFormData({ ...formData, linkUrl: e.target.value })} className="bg-[#111] border-gray-800 text-white font-mono" />
           </div>
           <div className="space-y-2">
-            <Label>Order</Label>
-            <Input type="number" value={formData.order} onChange={(e) => setFormData({ ...formData, order: parseInt(e.target.value) })} />
+            <Label className="text-xs font-mono text-gray-400">ORDER</Label>
+            <Input type="number" value={formData.order} onChange={(e) => setFormData({ ...formData, order: parseInt(e.target.value) })} className="bg-[#111] border-gray-800 text-white font-mono" />
           </div>
           <DialogFooter>
-            <Button type="submit">Update</Button>
+            <Button type="submit" className="bg-blue-600 hover:bg-blue-700 text-white font-mono">UPDATE_SPONSOR</Button>
           </DialogFooter>
         </form>
       </DialogContent>
@@ -1003,40 +1010,41 @@ function AddQnaDialog({ onSuccess }: { onSuccess: () => void }) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button><Plus className="w-4 h-4 mr-2" />Tambah QnA</Button>
+        <Button className="bg-blue-600 hover:bg-blue-700 text-white font-mono border border-blue-500/50"><Plus className="w-4 h-4 mr-2" />ADD_QNA</Button>
       </DialogTrigger>
-      <DialogContent className="bg-white">
-        <DialogHeader>
-          <DialogTitle>Tambah QnA</DialogTitle>
+      <DialogContent className="bg-[#0a0a0a] border border-gray-800 text-white">
+        <DialogHeader className="border-b border-gray-800 pb-4">
+          <DialogTitle className="font-mono text-xl">ADD_QNA</DialogTitle>
+          <DialogDescription className="font-mono text-gray-400 text-xs">./insert_qna_data.sh</DialogDescription>
         </DialogHeader>
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4 mt-4">
           <div className="space-y-2">
-            <Label>Pertanyaan</Label>
-            <Input required value={formData.question} onChange={(e) => setFormData({ ...formData, question: e.target.value })} />
+            <Label className="text-xs font-mono text-gray-400">QUESTION *</Label>
+            <Input required value={formData.question} onChange={(e) => setFormData({ ...formData, question: e.target.value })} className="bg-[#111] border-gray-800 text-white font-mono" />
           </div>
           <div className="space-y-2">
-            <Label>Jawaban</Label>
-            <Textarea required value={formData.answer} onChange={(e) => setFormData({ ...formData, answer: e.target.value })} />
+            <Label className="text-xs font-mono text-gray-400">ANSWER *</Label>
+            <Textarea required value={formData.answer} onChange={(e) => setFormData({ ...formData, answer: e.target.value })} className="bg-[#111] border-gray-800 text-white font-mono" />
           </div>
           <div className="space-y-2">
-            <Label>Mode (opsional)</Label>
+            <Label className="text-xs font-mono text-gray-400">MODE (OPTIONAL)</Label>
             <Select value={formData.mode} onValueChange={(value) => setFormData({ ...formData, mode: value })}>
-              <SelectTrigger>
-                <SelectValue placeholder="Semua mode" />
+              <SelectTrigger className="bg-[#111] border-gray-800 text-white font-mono">
+                <SelectValue placeholder="ALL_MODES" />
               </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="ALL">Semua mode</SelectItem>
-                <SelectItem value="TRAINING_BASIC">Training Basic</SelectItem>
-                <SelectItem value="PCC_CLASS">PCC Class</SelectItem>
+              <SelectContent className="bg-[#0a0a0a] border-gray-800 text-white">
+                <SelectItem value="ALL" className="focus:bg-gray-800 focus:text-white font-mono">ALL_MODES</SelectItem>
+                <SelectItem value="TRAINING_BASIC" className="focus:bg-gray-800 focus:text-white font-mono">TRAINING_BASIC</SelectItem>
+                <SelectItem value="PCC_CLASS" className="focus:bg-gray-800 focus:text-white font-mono">PCC_CLASS</SelectItem>
               </SelectContent>
             </Select>
           </div>
           <div className="space-y-2">
-            <Label>Order</Label>
-            <Input type="number" value={formData.order} onChange={(e) => setFormData({ ...formData, order: parseInt(e.target.value) })} />
+            <Label className="text-xs font-mono text-gray-400">ORDER</Label>
+            <Input type="number" value={formData.order} onChange={(e) => setFormData({ ...formData, order: parseInt(e.target.value) })} className="bg-[#111] border-gray-800 text-white font-mono" />
           </div>
           <DialogFooter>
-            <Button type="submit">Simpan</Button>
+            <Button type="submit" className="bg-blue-600 hover:bg-blue-700 text-white font-mono">SAVE_QNA</Button>
           </DialogFooter>
         </form>
       </DialogContent>
@@ -1074,42 +1082,43 @@ function EditQnaDialog({ item, onSuccess }: { item: QnaItem, onSuccess: () => vo
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button size="sm" variant="outline">
+        <Button size="sm" variant="ghost" className="text-blue-400 hover:text-blue-300 hover:bg-blue-900/20">
           <Edit className="w-4 h-4" />
         </Button>
       </DialogTrigger>
-      <DialogContent className="bg-white">
-        <DialogHeader>
-          <DialogTitle>Edit QnA</DialogTitle>
+      <DialogContent className="bg-[#0a0a0a] border border-gray-800 text-white">
+        <DialogHeader className="border-b border-gray-800 pb-4">
+          <DialogTitle className="font-mono text-xl">EDIT_QNA</DialogTitle>
+          <DialogDescription className="font-mono text-gray-400 text-xs">./update_qna_data.sh</DialogDescription>
         </DialogHeader>
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4 mt-4">
           <div className="space-y-2">
-            <Label>Pertanyaan</Label>
-            <Input required value={formData.question} onChange={(e) => setFormData({ ...formData, question: e.target.value })} />
+            <Label className="text-xs font-mono text-gray-400">QUESTION *</Label>
+            <Input required value={formData.question} onChange={(e) => setFormData({ ...formData, question: e.target.value })} className="bg-[#111] border-gray-800 text-white font-mono" />
           </div>
           <div className="space-y-2">
-            <Label>Jawaban</Label>
-            <Textarea required value={formData.answer} onChange={(e) => setFormData({ ...formData, answer: e.target.value })} rows={4} />
+            <Label className="text-xs font-mono text-gray-400">ANSWER *</Label>
+            <Textarea required value={formData.answer} onChange={(e) => setFormData({ ...formData, answer: e.target.value })} rows={4} className="bg-[#111] border-gray-800 text-white font-mono" />
           </div>
           <div className="space-y-2">
-            <Label>Mode (opsional)</Label>
+            <Label className="text-xs font-mono text-gray-400">MODE (OPTIONAL)</Label>
             <Select value={formData.mode} onValueChange={(value) => setFormData({ ...formData, mode: value })}>
-              <SelectTrigger>
-                <SelectValue placeholder="Semua mode" />
+              <SelectTrigger className="bg-[#111] border-gray-800 text-white font-mono">
+                <SelectValue placeholder="ALL_MODES" />
               </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="ALL">Semua mode</SelectItem>
-                <SelectItem value="TRAINING_BASIC">Training Basic</SelectItem>
-                <SelectItem value="PCC_CLASS">PCC Class</SelectItem>
+              <SelectContent className="bg-[#0a0a0a] border-gray-800 text-white">
+                <SelectItem value="ALL" className="focus:bg-gray-800 focus:text-white font-mono">ALL_MODES</SelectItem>
+                <SelectItem value="TRAINING_BASIC" className="focus:bg-gray-800 focus:text-white font-mono">TRAINING_BASIC</SelectItem>
+                <SelectItem value="PCC_CLASS" className="focus:bg-gray-800 focus:text-white font-mono">PCC_CLASS</SelectItem>
               </SelectContent>
             </Select>
           </div>
           <div className="space-y-2">
-            <Label>Order</Label>
-            <Input type="number" value={formData.order} onChange={(e) => setFormData({ ...formData, order: parseInt(e.target.value) })} />
+            <Label className="text-xs font-mono text-gray-400">ORDER</Label>
+            <Input type="number" value={formData.order} onChange={(e) => setFormData({ ...formData, order: parseInt(e.target.value) })} className="bg-[#111] border-gray-800 text-white font-mono" />
           </div>
           <DialogFooter>
-            <Button type="submit">Update</Button>
+            <Button type="submit" className="bg-blue-600 hover:bg-blue-700 text-white font-mono">UPDATE_QNA</Button>
           </DialogFooter>
         </form>
       </DialogContent>

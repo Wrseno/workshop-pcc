@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { ArrowRight, CheckCircle } from 'lucide-react'
+import { ArrowRight, CheckCircle, ChevronRight } from 'lucide-react'
 
 interface HeroSectionProps {
   mode: 'TRAINING_BASIC' | 'PCC_CLASS'
@@ -11,72 +11,101 @@ interface HeroSectionProps {
 
 export default function HeroSection({ mode, title, description }: HeroSectionProps) {
   return (
-    <section className="relative pt-32 pb-20 bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 overflow-hidden">
-      <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
+    <section className="relative min-h-screen flex items-center pt-32 pb-20 overflow-hidden bg-[#030712]">
+      {/* Grid Background */}
+      <div className="absolute inset-0 bg-grid-white/[0.02] bg-[length:50px_50px]"></div>
+      <div className="absolute inset-0 bg-gradient-to-b from-[#030712] via-transparent to-[#030712]"></div>
+      
+      {/* Glow Effects */}
+      <div className="absolute top-20 left-20 w-72 h-72 bg-blue-500/10 rounded-full blur-[100px]"></div>
+      <div className="absolute bottom-20 right-20 w-96 h-96 bg-purple-500/10 rounded-full blur-[100px]"></div>
+
       <div className="container mx-auto px-4 relative z-10">
-        <div className="flex flex-col md:flex-row items-center gap-12">
-          <div className="flex-1 space-y-6 text-center md:text-left">
-            <Badge variant="secondary" className="bg-blue-100 text-blue-700 px-4 py-2 text-sm font-semibold">
-              {mode === 'TRAINING_BASIC' ? ' Training Basic' : ' PCC Class'}
-            </Badge>
-            <h1 className="text-5xl md:text-6xl font-extrabold text-gray-900 leading-tight">
-              {title.split('-')[0]}<br />
-              <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                {title.split('-')[1]}
-              </span>
+        <div className="flex flex-col lg:flex-row items-center gap-16">
+          
+          {/* Left Content */}
+          <div className="flex-1 space-y-8 text-center lg:text-left">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded bg-blue-900/20 border border-blue-500/30 text-blue-400 font-mono text-xs tracking-wider">
+              <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
+              SYSTEM_STATUS: REGISTRATION_OPEN
+            </div>
+            
+            <h1 className="text-5xl md:text-7xl font-black text-white leading-tight tracking-tight">
+              TRAINING BASIC <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300">
+                WORKSHOP
+              </span> <br />
+              UKM PCC
             </h1>
-            <p className="text-xl text-gray-600 max-w-2xl">
-              {description}
+            
+            <p className="text-xl text-gray-400 max-w-2xl mx-auto lg:mx-0 leading-relaxed font-light">
+              <span className="italic">
+                Stop watching tech happen. Start building it. 
+                </span>
+                <br />
+              Program pelatihan dasar untuk mengembangkan keterampilan teknis di bidang IT.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
+            
+            <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
               <Link href="/register">
-                <Button size="lg" className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white text-lg px-8 py-6 shadow-lg hover:shadow-xl transition-all">
+                <Button size="lg" className="bg-white text-black hover:bg-gray-200 text-lg px-8 py-6 rounded-sm font-bold font-mono group">
                   Daftar Pelatihan
-                  <ArrowRight className="ml-2 w-5 h-5" />
+                  <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </Button>
               </Link>
-              <Button size="lg" variant="outline" className="text-lg px-8 py-6 border-2">
-                Pelajari Lebih Lanjut
-              </Button>
-            </div>
-            <div className="flex gap-8 justify-center md:justify-start pt-4">
-              <div className="text-center">
-                <div className="text-3xl font-bold text-blue-600">100+</div>
-                <div className="text-sm text-gray-600">Peserta</div>
-              </div>
-              <div className="text-center">
-                <div className="text-3xl font-bold text-purple-600">3</div>
-                <div className="text-sm text-gray-600">Program</div>
-              </div>
-              <div className="text-center">
-                <div className="text-3xl font-bold text-pink-600">100%</div>
-                <div className="text-sm text-gray-600">Gratis</div>
-              </div>
+              <Link href="#program">
+                <Button size="lg" variant="outline" className="border-gray-700 text-gray-300 hover:bg-gray-800 hover:text-white text-lg px-8 py-6 rounded-sm font-mono bg-transparent">
+                  view_program.sh
+                </Button>
+              </Link>
             </div>
           </div>
-          <div className="flex-1 relative">
-            <div className="relative w-full max-w-lg mx-auto">
-              <div className="absolute -top-10 -right-10 w-72 h-72 bg-blue-400 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob"></div>
-              <div className="absolute -bottom-10 -left-10 w-72 h-72 bg-purple-400 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-2000"></div>
-              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-72 h-72 bg-pink-400 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-4000"></div>
-              <div className="relative bg-white/50 backdrop-blur-lg rounded-3xl p-8 border border-white shadow-2xl">
-                <div className="space-y-4">
-                  <div className="flex items-center gap-3 bg-white rounded-xl p-4 shadow">
-                    <CheckCircle className="w-6 h-6 text-green-500" />
-                    <span className="font-semibold">Materi Berkualitas</span>
+
+          {/* Right Content - Terminal */}
+          <div className="flex-1 w-full max-w-xl">
+            <div className="rounded-xl overflow-hidden bg-[#0a0a0a] border border-gray-800 shadow-2xl shadow-blue-900/20 font-mono text-sm">
+              {/* Terminal Header */}
+              <div className="bg-[#1a1a1a] px-4 py-3 flex items-center gap-2 border-b border-gray-800">
+                <div className="flex gap-2">
+                  <div className="w-3 h-3 rounded-full bg-red-500/80"></div>
+                  <div className="w-3 h-3 rounded-full bg-yellow-500/80"></div>
+                  <div className="w-3 h-3 rounded-full bg-green-500/80"></div>
+                </div>
+                <div className="flex-1 text-center text-gray-500 text-xs">user@pcc-polines:~</div>
+              </div>
+              
+              {/* Terminal Body */}
+              <div className="p-6 space-y-4 min-h-[300px]">
+                <div className="flex items-center gap-2 text-green-400">
+                  <ChevronRight className="w-4 h-4" />
+                  <span className="text-blue-400">~</span>
+                  <span className="text-white">pcc init --batch=2025</span>
+                </div>
+                
+                <div className="text-gray-500 pl-6">Loading modules...</div>
+                
+                <div className="space-y-2 pl-6">
+                  <div className="flex items-center gap-3 p-3 rounded bg-blue-900/10 border border-blue-500/20 text-blue-300">
+                    <span className="text-blue-500">[OK]</span> Web_Dev_Module
                   </div>
-                  <div className="flex items-center gap-3 bg-white rounded-xl p-4 shadow">
-                    <CheckCircle className="w-6 h-6 text-green-500" />
-                    <span className="font-semibold">Hadiah Menarik</span>
+                  <div className="flex items-center gap-3 p-3 rounded bg-purple-900/10 border border-purple-500/20 text-purple-300">
+                    <span className="text-purple-500">[OK]</span> Net_Security
                   </div>
-                  <div className="flex items-center gap-3 bg-white rounded-xl p-4 shadow">
-                    <CheckCircle className="w-6 h-6 text-green-500" />
-                    <span className="font-semibold">Sertifikat Peserta</span>
+                  <div className="flex items-center gap-3 p-3 rounded bg-pink-900/10 border border-pink-500/20 text-pink-300">
+                    <span className="text-pink-500">[OK]</span> Multimedia_Arts
                   </div>
+                </div>
+
+                <div className="flex items-center gap-2 text-green-400 pt-4 animate-pulse">
+                  <ChevronRight className="w-4 h-4" />
+                  <span className="text-blue-400">~</span>
+                  <span className="text-white">awaiting_user_registration...</span>
+                  <span className="w-2 h-4 bg-white animate-blink"></span>
                 </div>
               </div>
             </div>
           </div>
+
         </div>
       </div>
     </section>

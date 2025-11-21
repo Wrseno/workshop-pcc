@@ -1,29 +1,32 @@
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
+import { Terminal } from 'lucide-react'
 
 export default function Navbar() {
   return (
-    <nav className="fixed top-0 left-0 right-0 bg-white/80 backdrop-blur-md z-50 border-b">
-      <div className="container mx-auto px-4 py-4">
-        <div className="flex justify-between items-center">
-          <div className="flex items-center space-x-2">
-            <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-xl">W</span>
-            </div>
-            <span className="font-bold text-xl">Workshop PCC</span>
+    <nav className="fixed top-6 left-0 right-0 z-50 flex justify-center px-4">
+      <div className="bg-[#0a0a0a]/90 backdrop-blur-md border border-white/10 rounded-full px-6 py-3 flex items-center justify-between w-full max-w-5xl shadow-2xl shadow-blue-900/10">
+        <div className="flex items-center gap-3">
+          <div className="bg-white/10 p-2 rounded-lg">
+            <Terminal className="w-5 h-5 text-blue-400" />
           </div>
-          <div className="hidden md:flex space-x-6">
-            <a href="#about" className="text-gray-700 hover:text-blue-600 transition">Tentang</a>
-            <a href="#program" className="text-gray-700 hover:text-blue-600 transition">Program</a>
-            <a href="#team" className="text-gray-700 hover:text-blue-600 transition">Tim</a>
-            <a href="#faq" className="text-gray-700 hover:text-blue-600 transition">FAQ</a>
-          </div>
-          <Link href="/register">
-            <Button className="bg-blue-600 hover:bg-blue-700 text-white">
-              Daftar Sekarang
-            </Button>
-          </Link>
+          <span className="font-mono font-bold text-lg tracking-tight text-white">
+            WORKSHOP<span className="text-blue-500">_PCC</span>
+          </span>
         </div>
+
+        <div className="hidden md:flex items-center gap-8">
+          <a href="#about" className="font-mono text-sm text-gray-400 hover:text-white transition-colors">_ABOUT</a>
+          <a href="#program" className="font-mono text-sm text-gray-400 hover:text-white transition-colors">_PROGRAMS</a>
+          <a href="#team" className="font-mono text-sm text-gray-400 hover:text-white transition-colors">_TEAM</a>
+          <a href="#faq" className="font-mono text-sm text-gray-400 hover:text-white transition-colors">_FAQ</a>
+        </div>
+
+        <Link href="/register">
+          <Button className="bg-blue-600 hover:bg-blue-700 text-white font-mono text-sm rounded-lg px-6 py-2 h-auto shadow-[0_0_15px_rgba(37,99,235,0.5)] border border-blue-400/30">
+            DAFTAR
+          </Button>
+        </Link>
       </div>
     </nav>
   )
