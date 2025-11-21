@@ -166,7 +166,7 @@ export default function TeamSection({ teamMembers }: TeamSectionProps) {
                           <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/50 to-transparent"></div>
                           
                           {/* Icon Overlay */}
-                          <div className="absolute bottom-4 left-4 bg-black/50 backdrop-blur-md p-2 rounded-lg border border-gray-700">
+                          <div className="absolute top-4 left-4 bg-black/50 backdrop-blur-md p-2 rounded-lg border border-gray-700">
                             <Icon className="w-6 h-6 text-white" />
                           </div>
                         </div>
