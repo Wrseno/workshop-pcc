@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
+import { Analytics } from "@vercel/analytics/react";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
@@ -60,7 +61,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark">
-      <body className={`${inter.variable} ${jetbrainsMono.variable} font-sans bg-[#030712] text-white antialiased`}>{children}</body>
+      <body className={`${inter.variable} ${jetbrainsMono.variable} font-sans bg-[#030712] text-white antialiased`}>
+        {children}
+        <Analytics />
+      </body>
     </html>
   );
 }
