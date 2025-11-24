@@ -50,7 +50,7 @@ export default function TeamSection({ teamMembers }: TeamSectionProps) {
       color: 'from-purple-500 to-pink-500',
       bgColor: 'from-purple-50 to-pink-50',
       description: 'Departemen Network adalah salah satu departemen di UKM PCC yang bertanggung jawab terhadap pelatihan yang berkaitan dengan Network serta menghasilkan produk dan portofolio yang berkaitan dengan Network',
-      image: '/images/network-dept.jpg'
+      image: '/images/network-dept.webp'
     },
     {
       id: 'SOFTWARE' as const,
