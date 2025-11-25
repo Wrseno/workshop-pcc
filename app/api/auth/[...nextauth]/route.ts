@@ -2,6 +2,7 @@ import NextAuth, { NextAuthConfig } from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
 import { prisma } from "@/lib/prisma"
 import bcrypt from "bcryptjs"
+import { loginRateLimit } from "@/lib/rate-limit"
 
 export const authConfig: NextAuthConfig = {
   providers: [
@@ -11,9 +12,19 @@ export const authConfig: NextAuthConfig = {
         username: { label: "Username", type: "text" },
         password: { label: "Password", type: "password" }
       },
-      async authorize(credentials) {
+      async authorize(credentials, request) {
         if (!credentials?.username || !credentials?.password) {
           return null
+        }
+
+        // Rate limiting for login attempts
+        if (loginRateLimit) {
+          const identifier = credentials.username as string;
+          const { success } = await loginRateLimit.limit(identifier);
+          
+          if (!success) {
+            throw new Error("Terlalu banyak percobaan login. Coba lagi dalam 15 menit.");
+          }
         }
 
         const admin = await prisma.admin.findUnique({

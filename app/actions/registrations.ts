@@ -3,6 +3,8 @@
 import { prisma } from '@/lib/prisma'
 import { revalidatePath } from 'next/cache'
 import { unstable_noStore as noStore } from 'next/cache'
+import { headers } from 'next/headers'
+import { registrationRateLimit } from '@/lib/rate-limit'
 
 export async function getRegistrations() {
   noStore()
@@ -27,6 +29,19 @@ export async function createRegistration(data: {
   buktiFollowPdfUrl: string
 }) {
   try {
+    // Rate limiting for registration
+    if (registrationRateLimit) {
+      const headersList = await headers();
+      const forwarded = headersList.get("x-forwarded-for");
+      const ip = forwarded ? forwarded.split(",")[0].trim() : "unknown";
+      
+      const { success } = await registrationRateLimit.limit(ip);
+      
+      if (!success) {
+        return { success: false, error: 'Terlalu banyak percobaan registrasi. Coba lagi dalam 1 jam.' };
+      }
+    }
+
     const { namaLengkap, nim, programStudi, jurusan, pilihanPelatihan, noWa, buktiFollowPdfUrl } = data
 
     // Check if NIM already exists
