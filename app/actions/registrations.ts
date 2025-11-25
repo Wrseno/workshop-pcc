@@ -2,8 +2,10 @@
 
 import { prisma } from '@/lib/prisma'
 import { revalidatePath } from 'next/cache'
+import { unstable_noStore as noStore } from 'next/cache'
 
 export async function getRegistrations() {
+  noStore()
   try {
     const registrations = await prisma.registration.findMany({
       orderBy: { createdAt: 'desc' }
@@ -114,6 +116,7 @@ export async function deleteRegistration(id: string) {
 }
 
 export async function getQuotaInfo() {
+  noStore()
   try {
     // Get site config for max quotas
     const config = await prisma.siteConfig.findUnique({

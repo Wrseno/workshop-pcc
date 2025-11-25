@@ -12,6 +12,10 @@ import { getTeamMembers } from '@/app/actions/team'
 import { getSponsors } from '@/app/actions/sponsors'
 import { getQnaItems } from '@/app/actions/qna'
 
+// Force dynamic rendering and disable caching
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 const trainingDescriptions = {
   TRAINING_BASIC: {
     title: 'Training Basic - Divisi Workshop UKM PCC',

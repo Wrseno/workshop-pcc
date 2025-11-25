@@ -2,8 +2,10 @@
 
 import { prisma } from '@/lib/prisma'
 import { revalidatePath } from 'next/cache'
+import { unstable_noStore as noStore } from 'next/cache'
 
 export async function getSponsors() {
+  noStore()
   try {
     const sponsors = await prisma.sponsor.findMany({
       orderBy: { order: 'asc' }

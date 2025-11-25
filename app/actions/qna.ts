@@ -2,8 +2,10 @@
 
 import { prisma } from '@/lib/prisma'
 import { revalidatePath } from 'next/cache'
+import { unstable_noStore as noStore } from 'next/cache'
 
 export async function getQnaItems(mode?: string | null) {
+  noStore()
   try {
     const qnaItems = await prisma.qnaItem.findMany({
       where: mode ? {

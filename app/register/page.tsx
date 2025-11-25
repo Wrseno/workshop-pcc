@@ -1,6 +1,10 @@
 import RegisterFormClient from '@/components/register/RegisterFormClient'
 import { getRegistrations, getQuotaInfo } from '@/app/actions/registrations'
 
+// Force dynamic rendering and disable caching
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 export default async function RegisterPage() {
   // Fetch initial data on server
   const [registrationsResult, quotaResult] = await Promise.all([
