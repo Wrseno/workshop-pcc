@@ -1,6 +1,3 @@
-'use client'
-
-import { useEffect, useState } from 'react'
 import Navbar from '@/components/landing/Navbar'
 import HeroSection from '@/components/landing/HeroSection'
 import AboutSection from '@/components/landing/AboutSection'
@@ -10,6 +7,10 @@ import SponsorsSection from '@/components/landing/SponsorsSection'
 import FaqSection from '@/components/landing/FaqSection'
 import CtaSection from '@/components/landing/CtaSection'
 import Footer from '@/components/landing/Footer'
+import { getConfig } from '@/app/actions/config'
+import { getTeamMembers } from '@/app/actions/team'
+import { getSponsors } from '@/app/actions/sponsors'
+import { getQnaItems } from '@/app/actions/qna'
 
 const trainingDescriptions = {
   TRAINING_BASIC: {
@@ -46,72 +47,21 @@ const trainingDescriptions = {
   }
 }
 
-export default function Home() {
-  const [config, setConfig] = useState<any>({ mode: 'TRAINING_BASIC' })
-  const [teamMembers, setTeamMembers] = useState<any[]>([])
-  const [sponsors, setSponsors] = useState<any[]>([])
-  const [qnaItems, setQnaItems] = useState<any[]>([])
-  const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+export default async function Home() {
+  // Fetch data using server actions
+  const [configResult, teamResult, sponsorsResult, qnaResult] = await Promise.all([
+    getConfig(),
+    getTeamMembers(),
+    getSponsors(),
+    getQnaItems()
+  ])
 
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const [configRes, teamRes, sponsorsRes, qnaRes] = await Promise.all([
-          fetch('/api/config').catch(() => ({ ok: false, json: () => Promise.resolve({ mode: 'TRAINING_BASIC' }) })),
-          fetch('/api/team').catch(() => ({ ok: false, json: () => Promise.resolve([]) })),
-          fetch('/api/sponsors').catch(() => ({ ok: false, json: () => Promise.resolve([]) })),
-          fetch('/api/qna').catch(() => ({ ok: false, json: () => Promise.resolve([]) }))
-        ])
-
-        const configData = configRes.ok ? await configRes.json() : { mode: 'TRAINING_BASIC' }
-        const teamData = teamRes.ok ? await teamRes.json() : []
-        const sponsorsData = sponsorsRes.ok ? await sponsorsRes.json() : []
-        const qnaData = qnaRes.ok ? await qnaRes.json() : []
-
-        setConfig(configData || { mode: 'TRAINING_BASIC' })
-        setTeamMembers(teamData)
-        setSponsors(sponsorsData)
-        setQnaItems(qnaData)
-      } catch (error) {
-        console.error('Failed to fetch data:', error)
-        setError('Failed to load data. Please refresh the page.')
-      } finally {
-        setIsLoading(false)
-      }
-    }
-
-    fetchData()
-  }, [])
+  const config = configResult.success && configResult.data ? configResult.data : { mode: 'TRAINING_BASIC' as const }
+  const teamMembers = teamResult.success && teamResult.data ? teamResult.data : []
+  const sponsors = sponsorsResult.success && sponsorsResult.data ? sponsorsResult.data : []
+  const qnaItems = qnaResult.success && qnaResult.data ? qnaResult.data : []
 
   const content = trainingDescriptions[config.mode as keyof typeof trainingDescriptions] || trainingDescriptions.TRAINING_BASIC
-
-  if (error) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-red-600 mb-4">{error}</p>
-          <button 
-            onClick={() => window.location.reload()} 
-            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-          >
-            Refresh Page
-          </button>
-        </div>
-      </div>
-    )
-  }
-
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading...</p>
-        </div>
-      </div>
-    )
-  }
 
   return (
     <div className="min-h-screen">

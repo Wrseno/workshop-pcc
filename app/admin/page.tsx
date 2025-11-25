@@ -14,6 +14,11 @@ import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { CheckCircle2, XCircle, Clock, LogOut, ExternalLink, Trash2, Plus, Edit } from 'lucide-react'
+import { getRegistrations, updateRegistrationStatus, deleteRegistration } from '@/app/actions/registrations'
+import { getConfig, updateConfig } from '@/app/actions/config'
+import { getTeamMembers, createTeamMember, updateTeamMember, deleteTeamMember } from '@/app/actions/team'
+import { getSponsors, createSponsor, updateSponsor, deleteSponsor } from '@/app/actions/sponsors'
+import { getQnaItems, createQnaItem, updateQnaItem, deleteQnaItem } from '@/app/actions/qna'
 
 type RegistrationStatus = 'PENDING' | 'VERIFY' | 'REJECT'
 type SiteMode = 'TRAINING_BASIC' | 'PCC_CLASS'
@@ -83,27 +88,19 @@ export default function AdminDashboard() {
 
   const fetchData = async () => {
     try {
-      const [regRes, teamRes, sponsorRes, qnaRes, configRes] = await Promise.all([
-        fetch('/api/registrations'),
-        fetch('/api/team'),
-        fetch('/api/sponsors'),
-        fetch('/api/qna'),
-        fetch('/api/config')
+      const [regResult, teamResult, sponsorResult, qnaResult, configResult] = await Promise.all([
+        getRegistrations(),
+        getTeamMembers(),
+        getSponsors(),
+        getQnaItems(),
+        getConfig()
       ])
 
-      const [regData, teamData, sponsorData, qnaData, configData] = await Promise.all([
-        regRes.json(),
-        teamRes.json(),
-        sponsorRes.json(),
-        qnaRes.json(),
-        configRes.json()
-      ])
-
-      setRegistrations(regData)
-      setTeamMembers(teamData)
-      setSponsors(sponsorData)
-      setQnaItems(qnaData)
-      setSiteMode(configData.mode)
+      if (regResult.success && regResult.data) setRegistrations(regResult.data.map(r => ({ ...r, createdAt: new Date(r.createdAt).toISOString() })))
+      if (teamResult.success && teamResult.data) setTeamMembers(teamResult.data)
+      if (sponsorResult.success && sponsorResult.data) setSponsors(sponsorResult.data)
+      if (qnaResult.success && qnaResult.data) setQnaItems(qnaResult.data)
+      if (configResult.success && configResult.data) setSiteMode(configResult.data.mode)
     } catch (error) {
       console.error('Failed to fetch data', error)
     } finally {
@@ -111,17 +108,12 @@ export default function AdminDashboard() {
     }
   }
 
-  const updateRegistrationStatus = async (id: string, status: RegistrationStatus) => {
+  const handleUpdateRegistrationStatus = async (id: string, status: RegistrationStatus) => {
     try {
-      const response = await fetch(`/api/registrations/${id}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ status })
-      })
+      const result = await updateRegistrationStatus(id, status)
       
-      if (!response.ok) {
-        const errorData = await response.json()
-        alert(`Failed to update registration: ${errorData.error || 'Unknown error'}`)
+      if (!result.success) {
+        alert(`Failed to update registration: ${result.error || 'Unknown error'}`)
         return
       }
       
@@ -132,40 +124,38 @@ export default function AdminDashboard() {
     }
   }
 
-  const updateSiteMode = async (mode: SiteMode) => {
+  const handleUpdateSiteMode = async (mode: SiteMode) => {
     try {
-      await fetch('/api/config', {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ mode })
-      })
-      setSiteMode(mode)
+      const result = await updateConfig(mode)
+      if (result.success) {
+        setSiteMode(mode)
+      }
     } catch (error) {
       console.error('Failed to update mode', error)
     }
   }
 
-  const deleteTeamMember = async (id: string) => {
+  const handleDeleteTeamMember = async (id: string) => {
     try {
-      await fetch(`/api/team/${id}`, { method: 'DELETE' })
+      await deleteTeamMember(id)
       fetchData()
     } catch (error) {
       console.error('Failed to delete team member', error)
     }
   }
 
-  const deleteSponsor = async (id: string) => {
+  const handleDeleteSponsor = async (id: string) => {
     try {
-      await fetch(`/api/sponsors/${id}`, { method: 'DELETE' })
+      await deleteSponsor(id)
       fetchData()
     } catch (error) {
       console.error('Failed to delete sponsor', error)
     }
   }
 
-  const deleteQnaItem = async (id: string) => {
+  const handleDeleteQnaItem = async (id: string) => {
     try {
-      await fetch(`/api/qna/${id}`, { method: 'DELETE' })
+      await deleteQnaItem(id)
       fetchData()
     } catch (error) {
       console.error('Failed to delete QnA item', error)
@@ -322,7 +312,7 @@ export default function AdminDashboard() {
                             <Button
                               size="sm"
                               variant="outline"
-                              onClick={() => updateRegistrationStatus(reg.id, 'VERIFY')}
+                              onClick={() => handleUpdateRegistrationStatus(reg.id, 'VERIFY')}
                               disabled={reg.status === 'VERIFY'}
                               className="bg-[#111] border-green-900/50 text-green-500 hover:bg-green-900/20 hover:border-green-500 disabled:opacity-30 disabled:bg-transparent"
                             >
@@ -331,7 +321,7 @@ export default function AdminDashboard() {
                             <Button
                               size="sm"
                               variant="outline"
-                              onClick={() => updateRegistrationStatus(reg.id, 'REJECT')}
+                              onClick={() => handleUpdateRegistrationStatus(reg.id, 'REJECT')}
                               disabled={reg.status === 'REJECT'}
                               className="bg-[#111] border-red-900/50 text-red-500 hover:bg-red-900/20 hover:border-red-500 disabled:opacity-30 disabled:bg-transparent"
                             >
@@ -358,7 +348,7 @@ export default function AdminDashboard() {
               <CardContent className="p-6 bg-[#0a0a0a]">
                 <div className="space-y-4">
                   <Label className="text-xs font-mono text-gray-400">SELECT_MODE</Label>
-                  <Select value={siteMode} onValueChange={(value) => updateSiteMode(value as SiteMode)}>
+                  <Select value={siteMode} onValueChange={(value) => handleUpdateSiteMode(value as SiteMode)}>
                     <SelectTrigger className="h-12 bg-[#111] border-gray-800 text-white font-mono">
                       <SelectValue />
                     </SelectTrigger>
@@ -461,7 +451,7 @@ export default function AdminDashboard() {
                                 <Button
                                   size="sm"
                                   variant="outline"
-                                  onClick={() => deleteTeamMember(member.id)}
+                                  onClick={() => handleDeleteTeamMember(member.id)}
                                   className="bg-[#111] border-red-900/50 text-red-500 hover:bg-red-900/20 hover:border-red-500"
                                 >
                                   <Trash2 className="w-4 h-4" />
@@ -625,7 +615,7 @@ export default function AdminDashboard() {
                             <Button
                               size="sm"
                               variant="outline"
-                              onClick={() => deleteSponsor(sponsor.id)}
+                              onClick={() => handleDeleteSponsor(sponsor.id)}
                               className="bg-[#111] border-red-900/50 text-red-500 hover:bg-red-900/20 hover:border-red-500"
                             >
                               <Trash2 className="w-4 h-4" />
@@ -672,7 +662,7 @@ export default function AdminDashboard() {
                             <Button
                               size="sm"
                               variant="outline"
-                              onClick={() => deleteQnaItem(item.id)}
+                              onClick={() => handleDeleteQnaItem(item.id)}
                               className="bg-[#111] border-red-900/50 text-red-500 hover:bg-red-900/20 hover:border-red-500"
                             >
                               <Trash2 className="w-4 h-4" />
@@ -706,11 +696,7 @@ function AddTeamMemberDialog({ onSuccess }: { onSuccess: () => void }) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     try {
-      await fetch('/api/team', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
-      })
+      await createTeamMember(formData)
       setOpen(false)
       setFormData({ name: '', position: '', avatarUrl: '', description: '', type: 'DIVISI', order: 0 })
       onSuccess()
@@ -796,11 +782,7 @@ function EditTeamMemberDialog({ member, onSuccess }: { member: TeamMember, onSuc
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     try {
-      await fetch(`/api/team/${member.id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
-      })
+      await updateTeamMember(member.id, formData)
       setOpen(false)
       onSuccess()
     } catch (error) {
@@ -873,11 +855,7 @@ function AddSponsorDialog({ onSuccess }: { onSuccess: () => void }) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     try {
-      await fetch('/api/sponsors', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
-      })
+      await createSponsor(formData)
       setOpen(false)
       setFormData({ name: '', logoUrl: '', linkUrl: '', order: 0 })
       onSuccess()
@@ -934,11 +912,7 @@ function EditSponsorDialog({ sponsor, onSuccess }: { sponsor: Sponsor, onSuccess
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     try {
-      await fetch(`/api/sponsors/${sponsor.id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
-      })
+      await updateSponsor(sponsor.id, formData)
       setOpen(false)
       onSuccess()
     } catch (error) {
@@ -991,13 +965,9 @@ function AddQnaDialog({ onSuccess }: { onSuccess: () => void }) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     try {
-      await fetch('/api/qna', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          ...formData,
-          mode: formData.mode === 'ALL' ? null : formData.mode
-        })
+      await createQnaItem({
+        ...formData,
+        mode: formData.mode === 'ALL' ? null : formData.mode
       })
       setOpen(false)
       setFormData({ question: '', answer: '', mode: 'ALL', order: 0 })
@@ -1064,13 +1034,9 @@ function EditQnaDialog({ item, onSuccess }: { item: QnaItem, onSuccess: () => vo
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     try {
-      await fetch(`/api/qna/${item.id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          ...formData,
-          mode: formData.mode === 'ALL' ? null : formData.mode
-        })
+      await updateQnaItem(item.id, {
+        ...formData,
+        mode: formData.mode === 'ALL' ? null : formData.mode
       })
       setOpen(false)
       onSuccess()
