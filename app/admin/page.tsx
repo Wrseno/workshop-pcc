@@ -13,7 +13,8 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { CheckCircle2, XCircle, Clock, LogOut, ExternalLink, Trash2, Plus, Edit } from 'lucide-react'
+import { CheckCircle2, XCircle, Clock, LogOut, ExternalLink, Trash2, Plus, Edit, Download, Filter } from 'lucide-react'
+import Papa from 'papaparse'
 import { getRegistrations, updateRegistrationStatus, deleteRegistration } from '@/app/actions/registrations'
 import { getConfig, updateConfig } from '@/app/actions/config'
 import { getTeamMembers, createTeamMember, updateTeamMember, deleteTeamMember } from '@/app/actions/team'
@@ -72,6 +73,9 @@ export default function AdminDashboard() {
   const [qnaItems, setQnaItems] = useState<QnaItem[]>([])
   const [siteMode, setSiteMode] = useState<SiteMode>('TRAINING_BASIC')
   const [isLoading, setIsLoading] = useState(true)
+  
+  // Registration filter state
+  const [departmentFilter, setDepartmentFilter] = useState<'ALL' | 'SOFTWARE' | 'NETWORK' | 'MULTIMEDIA'>('ALL')
   
   // Team pagination and filter states
   const [teamFilter, setTeamFilter] = useState<'ALL' | TeamType>('ALL')
@@ -173,6 +177,38 @@ export default function AdminDashboard() {
     }
   }
 
+  // Filter registrations by department
+  const filteredRegistrations = departmentFilter === 'ALL'
+    ? registrations
+    : registrations.filter(r => r.pilihanPelatihan === departmentFilter)
+
+  // Export to CSV function
+  const exportToCSV = () => {
+    const dataToExport = filteredRegistrations.map(reg => ({
+      'Nama Lengkap': reg.namaLengkap,
+      'NIM': reg.nim,
+      'Program Studi': reg.programStudi,
+      'Jurusan': reg.jurusan,
+      'Pilihan Pelatihan': reg.pilihanPelatihan || '-',
+      'No WhatsApp': reg.noWa,
+      'Status': reg.status,
+      'Tanggal Daftar': new Date(reg.createdAt).toLocaleString('id-ID'),
+      'Bukti Follow PDF': reg.buktiFollowPdfUrl
+    }))
+
+    const csv = Papa.unparse(dataToExport)
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
+    const link = document.createElement('a')
+    const url = URL.createObjectURL(blob)
+    
+    link.setAttribute('href', url)
+    link.setAttribute('download', `registrations_${departmentFilter}_${new Date().toISOString().split('T')[0]}.csv`)
+    link.style.visibility = 'hidden'
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+  }
+
   // Filter and paginate team members
   const filteredTeamMembers = teamFilter === 'ALL' 
     ? teamMembers 
@@ -258,20 +294,46 @@ export default function AdminDashboard() {
           <TabsContent value="registrations">
             <Card className="border border-gray-800 bg-[#0a0a0a] shadow-xl">
               <CardHeader className="border-b border-gray-800 bg-[#0a0a0a]">
-                <CardTitle className="text-2xl font-mono text-white">REGISTRATION_MANAGEMENT</CardTitle>
-                <div className="flex flex-wrap gap-3 mt-2 font-mono text-xs">
-                  <span className="px-3 py-1 bg-gray-900 border border-gray-800 rounded-sm text-gray-300">
-                    TOTAL: <strong className="text-white">{registrations.length}</strong>
-                  </span>
-                  <span className="px-3 py-1 bg-yellow-900/20 border border-yellow-900/50 rounded-sm text-yellow-500">
-                    PENDING: <strong className="text-yellow-400">{registrations.filter(r => r.status === 'PENDING').length}</strong>
-                  </span>
-                  <span className="px-3 py-1 bg-green-900/20 border border-green-900/50 rounded-sm text-green-500">
-                    VERIFIED: <strong className="text-green-400">{registrations.filter(r => r.status === 'VERIFY').length}</strong>
-                  </span>
-                  <span className="px-3 py-1 bg-red-900/20 border border-red-900/50 rounded-sm text-red-500">
-                    REJECTED: <strong className="text-red-400">{registrations.filter(r => r.status === 'REJECT').length}</strong>
-                  </span>
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                  <div>
+                    <CardTitle className="text-2xl font-mono text-white">REGISTRATION_MANAGEMENT</CardTitle>
+                    <div className="flex flex-wrap gap-3 mt-2 font-mono text-xs">
+                      <span className="px-3 py-1 bg-gray-900 border border-gray-800 rounded-sm text-gray-300">
+                        TOTAL: <strong className="text-white">{registrations.length}</strong>
+                      </span>
+                      <span className="px-3 py-1 bg-yellow-900/20 border border-yellow-900/50 rounded-sm text-yellow-500">
+                        PENDING: <strong className="text-yellow-400">{registrations.filter(r => r.status === 'PENDING').length}</strong>
+                      </span>
+                      <span className="px-3 py-1 bg-green-900/20 border border-green-900/50 rounded-sm text-green-500">
+                        VERIFIED: <strong className="text-green-400">{registrations.filter(r => r.status === 'VERIFY').length}</strong>
+                      </span>
+                      <span className="px-3 py-1 bg-red-900/20 border border-red-900/50 rounded-sm text-red-500">
+                        REJECTED: <strong className="text-red-400">{registrations.filter(r => r.status === 'REJECT').length}</strong>
+                      </span>
+                    </div>
+                  </div>
+                  <div className="flex gap-2">
+                    <Select value={departmentFilter} onValueChange={(value: any) => setDepartmentFilter(value)}>
+                      <SelectTrigger className="w-[180px] bg-[#111] border-gray-800 text-white font-mono">
+                        <Filter className="w-4 h-4 mr-2" />
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent className="bg-[#111] border-gray-800">
+                        <SelectItem value="ALL" className="text-white font-mono">ALL DEPARTMENTS</SelectItem>
+                        <SelectItem value="SOFTWARE" className="text-white font-mono">SOFTWARE</SelectItem>
+                        <SelectItem value="NETWORK" className="text-white font-mono">NETWORK</SelectItem>
+                        <SelectItem value="MULTIMEDIA" className="text-white font-mono">MULTIMEDIA</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <Button
+                      onClick={exportToCSV}
+                      className="bg-green-600 hover:bg-green-700 text-white font-mono"
+                      disabled={filteredRegistrations.length === 0}
+                    >
+                      <Download className="w-4 h-4 mr-2" />
+                      EXPORT_CSV
+                    </Button>
+                  </div>
                 </div>
               </CardHeader>
               <CardContent className="p-6 bg-[#0a0a0a]">
@@ -291,7 +353,13 @@ export default function AdminDashboard() {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {registrations.map((reg) => (
+                    {filteredRegistrations.length === 0 ? (
+                      <TableRow>
+                        <TableCell colSpan={9} className="text-center py-8 text-gray-500 font-mono">
+                          NO_DATA_FOUND
+                        </TableCell>
+                      </TableRow>
+                    ) : filteredRegistrations.map((reg) => (
                       <TableRow key={reg.id} className="border-gray-800 hover:bg-gray-900/50 transition">
                         <TableCell className="font-medium font-mono text-white">{reg.namaLengkap}</TableCell>
                         <TableCell className="font-mono text-gray-400">{reg.nim}</TableCell>
