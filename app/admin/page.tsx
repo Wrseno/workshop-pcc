@@ -9,6 +9,7 @@ import { LogOut } from "lucide-react";
 import {
   getRegistrations,
   updateRegistrationStatus,
+  getQuotaInfo,
 } from "@/app/actions/registrations";
 import { getConfig, updateConfig } from "@/app/actions/config";
 import {
@@ -60,6 +61,11 @@ export default function AdminDashboard() {
   const [qnaItems, setQnaItems] = useState<QnaItem[]>([]);
   const [siteMode, setSiteMode] = useState<SiteMode>("TRAINING_BASIC");
   const [isLoading, setIsLoading] = useState(true);
+  const [quotaInfo, setQuotaInfo] = useState<{
+    software: { current: number; max: number; full: boolean };
+    network: { current: number; max: number; full: boolean };
+    multimedia: { current: number; max: number; full: boolean };
+  } | null>(null);
 
   // Registration filter state
   const [departmentFilter, setDepartmentFilter] = useState<
@@ -76,14 +82,21 @@ export default function AdminDashboard() {
 
   const fetchData = async () => {
     try {
-      const [regResult, teamResult, sponsorResult, qnaResult, configResult] =
-        await Promise.all([
-          getRegistrations(),
-          getTeamMembers(),
-          getSponsors(),
-          getQnaItems(),
-          getConfig(),
-        ]);
+      const [
+        regResult,
+        teamResult,
+        sponsorResult,
+        qnaResult,
+        configResult,
+        quotaResult,
+      ] = await Promise.all([
+        getRegistrations(),
+        getTeamMembers(),
+        getSponsors(),
+        getQnaItems(),
+        getConfig(),
+        getQuotaInfo(),
+      ]);
 
       if (regResult.success && regResult.data)
         setRegistrations(
@@ -104,6 +117,8 @@ export default function AdminDashboard() {
       if (qnaResult.success && qnaResult.data) setQnaItems(qnaResult.data);
       if (configResult.success && configResult.data)
         setSiteMode(configResult.data.mode);
+      if (quotaResult.success && quotaResult.data)
+        setQuotaInfo(quotaResult.data);
     } catch (error) {
       console.error("Failed to fetch data", error);
     } finally {
@@ -244,6 +259,7 @@ export default function AdminDashboard() {
               departmentFilter={departmentFilter}
               onFilterChange={setDepartmentFilter}
               onUpdateStatus={handleUpdateRegistrationStatus}
+              quotaInfo={quotaInfo}
             />
           </TabsContent>
 

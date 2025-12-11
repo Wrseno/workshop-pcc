@@ -29,6 +29,12 @@ import {
 import Papa from "papaparse";
 import { Registration, RegistrationStatus } from "./types";
 
+interface QuotaInfo {
+  software: { current: number; max: number; full: boolean };
+  network: { current: number; max: number; full: boolean };
+  multimedia: { current: number; max: number; full: boolean };
+}
+
 interface RegistrationsTabProps {
   registrations: Registration[];
   departmentFilter: "ALL" | "SOFTWARE" | "NETWORK" | "MULTIMEDIA";
@@ -36,6 +42,7 @@ interface RegistrationsTabProps {
     filter: "ALL" | "SOFTWARE" | "NETWORK" | "MULTIMEDIA"
   ) => void;
   onUpdateStatus: (id: string, status: RegistrationStatus) => void;
+  quotaInfo?: QuotaInfo | null;
 }
 
 export function RegistrationsTab({
@@ -43,11 +50,31 @@ export function RegistrationsTab({
   departmentFilter,
   onFilterChange,
   onUpdateStatus,
+  quotaInfo,
 }: RegistrationsTabProps) {
   const filteredRegistrations =
     departmentFilter === "ALL"
       ? registrations
       : registrations.filter((r) => r.pilihanPelatihan === departmentFilter);
+
+  // Check if current filter has full quota
+  const isCurrentFilterFull = () => {
+    if (!quotaInfo) return false;
+    if (departmentFilter === "SOFTWARE") return quotaInfo.software.full;
+    if (departmentFilter === "NETWORK") return quotaInfo.network.full;
+    if (departmentFilter === "MULTIMEDIA") return quotaInfo.multimedia.full;
+    return (
+      quotaInfo.software.full &&
+      quotaInfo.network.full &&
+      quotaInfo.multimedia.full
+    );
+  };
+
+  const isAllQuotaFull = quotaInfo
+    ? quotaInfo.software.full &&
+      quotaInfo.network.full &&
+      quotaInfo.multimedia.full
+    : false;
 
   const getStatusBadge = (status: RegistrationStatus) => {
     switch (status) {
@@ -175,109 +202,203 @@ export function RegistrationsTab({
         </div>
       </CardHeader>
       <CardContent className="p-6 bg-[#0a0a0a]">
-        <div className="overflow-x-auto">
-          <Table>
-            <TableHeader>
-              <TableRow className="border-gray-800 hover:bg-transparent">
-                <TableHead className="font-mono text-gray-400">NAME</TableHead>
-                <TableHead className="font-mono text-gray-400">NIM</TableHead>
-                <TableHead className="font-mono text-gray-400">PRODI</TableHead>
-                <TableHead className="font-mono text-gray-400">MAJOR</TableHead>
-                <TableHead className="font-mono text-gray-400">
-                  TRAINING
-                </TableHead>
-                <TableHead className="font-mono text-gray-400">
-                  WHATSAPP
-                </TableHead>
-                <TableHead className="font-mono text-gray-400">
-                  PROOF_PDF
-                </TableHead>
-                <TableHead className="font-mono text-gray-400">
-                  STATUS
-                </TableHead>
-                <TableHead className="font-mono text-gray-400">
-                  ACTION
-                </TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {filteredRegistrations.length === 0 ? (
-                <TableRow>
-                  <TableCell
-                    colSpan={9}
-                    className="text-center py-8 text-gray-500 font-mono"
-                  >
-                    NO_DATA_FOUND
-                  </TableCell>
+        {/* Quota Status Display */}
+        {quotaInfo && (
+          <div className="mb-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div
+              className={`p-4 rounded-lg border ${
+                quotaInfo.software.full
+                  ? "bg-red-900/20 border-red-900/50"
+                  : "bg-blue-900/20 border-blue-900/50"
+              }`}
+            >
+              <div className="flex items-center justify-between">
+                <span className="font-mono text-sm text-gray-400">
+                  SOFTWARE
+                </span>
+                {quotaInfo.software.full && (
+                  <Badge className="bg-red-600 text-white font-mono text-xs">
+                    FULL
+                  </Badge>
+                )}
+              </div>
+              <p className="text-2xl font-bold font-mono text-white mt-1">
+                {quotaInfo.software.current} / {quotaInfo.software.max}
+              </p>
+            </div>
+            <div
+              className={`p-4 rounded-lg border ${
+                quotaInfo.network.full
+                  ? "bg-red-900/20 border-red-900/50"
+                  : "bg-green-900/20 border-green-900/50"
+              }`}
+            >
+              <div className="flex items-center justify-between">
+                <span className="font-mono text-sm text-gray-400">NETWORK</span>
+                {quotaInfo.network.full && (
+                  <Badge className="bg-red-600 text-white font-mono text-xs">
+                    FULL
+                  </Badge>
+                )}
+              </div>
+              <p className="text-2xl font-bold font-mono text-white mt-1">
+                {quotaInfo.network.current} / {quotaInfo.network.max}
+              </p>
+            </div>
+            <div
+              className={`p-4 rounded-lg border ${
+                quotaInfo.multimedia.full
+                  ? "bg-red-900/20 border-red-900/50"
+                  : "bg-purple-900/20 border-purple-900/50"
+              }`}
+            >
+              <div className="flex items-center justify-between">
+                <span className="font-mono text-sm text-gray-400">
+                  MULTIMEDIA
+                </span>
+                {quotaInfo.multimedia.full && (
+                  <Badge className="bg-red-600 text-white font-mono text-xs">
+                    FULL
+                  </Badge>
+                )}
+              </div>
+              <p className="text-2xl font-bold font-mono text-white mt-1">
+                {quotaInfo.multimedia.current} / {quotaInfo.multimedia.max}
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* All Quota Full Warning */}
+        {isAllQuotaFull && (
+          <div className="mb-6 p-4 bg-red-900/30 border border-red-900/50 rounded-lg">
+            <p className="font-mono text-red-400 text-center">
+              ⚠️ SEMUA KUOTA PELATIHAN SUDAH PENUH - PENDAFTARAN DITUTUP
+            </p>
+          </div>
+        )}
+
+        {/* Table - Hidden when quota is full for selected department */}
+        {isCurrentFilterFull() && departmentFilter !== "ALL" ? (
+          <div className="p-8 text-center border border-gray-800 rounded-lg bg-gray-900/30">
+            <p className="font-mono text-gray-400 text-lg mb-2">
+              🔒 KUOTA {departmentFilter} SUDAH PENUH
+            </p>
+            <p className="font-mono text-gray-500 text-sm">
+              Tidak ada slot tersedia untuk departemen ini
+            </p>
+          </div>
+        ) : (
+          <div className="overflow-x-auto">
+            <Table>
+              <TableHeader>
+                <TableRow className="border-gray-800 hover:bg-transparent">
+                  <TableHead className="font-mono text-gray-400">
+                    NAME
+                  </TableHead>
+                  <TableHead className="font-mono text-gray-400">NIM</TableHead>
+                  <TableHead className="font-mono text-gray-400">
+                    PRODI
+                  </TableHead>
+                  <TableHead className="font-mono text-gray-400">
+                    MAJOR
+                  </TableHead>
+                  <TableHead className="font-mono text-gray-400">
+                    TRAINING
+                  </TableHead>
+                  <TableHead className="font-mono text-gray-400">
+                    WHATSAPP
+                  </TableHead>
+                  <TableHead className="font-mono text-gray-400">
+                    PROOF_PDF
+                  </TableHead>
+                  <TableHead className="font-mono text-gray-400">
+                    STATUS
+                  </TableHead>
+                  <TableHead className="font-mono text-gray-400">
+                    ACTION
+                  </TableHead>
                 </TableRow>
-              ) : (
-                filteredRegistrations.map((reg) => (
-                  <TableRow
-                    key={reg.id}
-                    className="border-gray-800 hover:bg-gray-900/50 transition"
-                  >
-                    <TableCell className="font-medium font-mono text-white">
-                      {reg.namaLengkap}
-                    </TableCell>
-                    <TableCell className="font-mono text-gray-400">
-                      {reg.nim}
-                    </TableCell>
-                    <TableCell className="font-mono text-gray-400">
-                      {reg.programStudi}
-                    </TableCell>
-                    <TableCell className="font-mono text-gray-400">
-                      {reg.jurusan}
-                    </TableCell>
-                    <TableCell className="font-mono text-blue-400">
-                      {reg.pilihanPelatihan || "-"}
-                    </TableCell>
-                    <TableCell className="font-mono text-gray-400">
-                      {reg.noWa}
-                    </TableCell>
-                    <TableCell>
-                      <a
-                        href={reg.buktiFollowPdfUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="hover:bg-blue-900/20 hover:text-blue-400 text-gray-400"
-                        >
-                          <ExternalLink className="w-4 h-4" />
-                        </Button>
-                      </a>
-                    </TableCell>
-                    <TableCell>{getStatusBadge(reg.status)}</TableCell>
-                    <TableCell>
-                      <div className="flex gap-2">
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={() => onUpdateStatus(reg.id, "VERIFY")}
-                          disabled={reg.status === "VERIFY"}
-                          className="bg-[#111] border-green-900/50 text-green-500 hover:bg-green-900/20 hover:border-green-500 disabled:opacity-30 disabled:bg-transparent"
-                        >
-                          <CheckCircle2 className="w-4 h-4" />
-                        </Button>
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={() => onUpdateStatus(reg.id, "REJECT")}
-                          disabled={reg.status === "REJECT"}
-                          className="bg-[#111] border-red-900/50 text-red-500 hover:bg-red-900/20 hover:border-red-500 disabled:opacity-30 disabled:bg-transparent"
-                        >
-                          <XCircle className="w-4 h-4" />
-                        </Button>
-                      </div>
+              </TableHeader>
+              <TableBody>
+                {filteredRegistrations.length === 0 ? (
+                  <TableRow>
+                    <TableCell
+                      colSpan={9}
+                      className="text-center py-8 text-gray-500 font-mono"
+                    >
+                      NO_DATA_FOUND
                     </TableCell>
                   </TableRow>
-                ))
-              )}
-            </TableBody>
-          </Table>
-        </div>
+                ) : (
+                  filteredRegistrations.map((reg) => (
+                    <TableRow
+                      key={reg.id}
+                      className="border-gray-800 hover:bg-gray-900/50 transition"
+                    >
+                      <TableCell className="font-medium font-mono text-white">
+                        {reg.namaLengkap}
+                      </TableCell>
+                      <TableCell className="font-mono text-gray-400">
+                        {reg.nim}
+                      </TableCell>
+                      <TableCell className="font-mono text-gray-400">
+                        {reg.programStudi}
+                      </TableCell>
+                      <TableCell className="font-mono text-gray-400">
+                        {reg.jurusan}
+                      </TableCell>
+                      <TableCell className="font-mono text-blue-400">
+                        {reg.pilihanPelatihan || "-"}
+                      </TableCell>
+                      <TableCell className="font-mono text-gray-400">
+                        {reg.noWa}
+                      </TableCell>
+                      <TableCell>
+                        <a
+                          href={reg.buktiFollowPdfUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="hover:bg-blue-900/20 hover:text-blue-400 text-gray-400"
+                          >
+                            <ExternalLink className="w-4 h-4" />
+                          </Button>
+                        </a>
+                      </TableCell>
+                      <TableCell>{getStatusBadge(reg.status)}</TableCell>
+                      <TableCell>
+                        <div className="flex gap-2">
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => onUpdateStatus(reg.id, "VERIFY")}
+                            disabled={reg.status === "VERIFY"}
+                            className="bg-[#111] border-green-900/50 text-green-500 hover:bg-green-900/20 hover:border-green-500 disabled:opacity-30 disabled:bg-transparent"
+                          >
+                            <CheckCircle2 className="w-4 h-4" />
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => onUpdateStatus(reg.id, "REJECT")}
+                            disabled={reg.status === "REJECT"}
+                            className="bg-[#111] border-red-900/50 text-red-500 hover:bg-red-900/20 hover:border-red-500 disabled:opacity-30 disabled:bg-transparent"
+                          >
+                            <XCircle className="w-4 h-4" />
+                          </Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
+              </TableBody>
+            </Table>
+          </div>
+        )}
       </CardContent>
     </Card>
   );
