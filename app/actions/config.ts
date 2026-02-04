@@ -31,9 +31,9 @@ export async function updateConfig(data: {
   maxQuotaSoftware?: number,
   maxQuotaNetwork?: number,
   maxQuotaMultimedia?: number,
-  waLinkSoftware?: string,
-  waLinkNetwork?: string,
-  waLinkMultimedia?: string
+  waLinkSoftware?: string | null,
+  waLinkNetwork?: string | null,
+  waLinkMultimedia?: string | null
 }) {
   try {
     const config = await prisma.siteConfig.upsert({

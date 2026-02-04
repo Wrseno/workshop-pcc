@@ -174,12 +174,9 @@ export default function RegisterFormClient({
         } else {
           setMessage({
             type: "success",
-            text: "Pendaftaran berhasil! Silakan bergabung ke grup WhatsApp.",
+            text: "Pendaftaran berhasil! Silakan tunggu verifikasi admin untuk mendapatkan link grup WhatsApp.",
           });
-          
-          if (result.whatsappUrl) {
-            setWaLink(result.whatsappUrl);
-          }
+
 
           setFormData({
             namaLengkap: "",
