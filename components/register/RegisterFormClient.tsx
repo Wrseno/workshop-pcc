@@ -67,11 +67,15 @@ interface QuotaInfo {
 interface RegisterFormClientProps {
   initialRegistrations: Registration[];
   initialQuota: QuotaInfo | null;
+  existingRegistration?: Registration | null;
+  initialWaLink?: string | null;
 }
 
 export default function RegisterFormClient({
   initialRegistrations,
   initialQuota,
+  existingRegistration = null,
+  initialWaLink = null,
 }: RegisterFormClientProps) {
   const [registrations, setRegistrations] =
     useState<Registration[]>(initialRegistrations);
@@ -83,11 +87,12 @@ export default function RegisterFormClient({
   const [quotaFull, setQuotaFull] = useState(false);
   const [quotaInfo, setQuotaInfo] = useState<QuotaInfo | null>(initialQuota);
   const [userRegistration, setUserRegistration] = useState<Registration | null>(
-    null
+    existingRegistration
   );
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
   const itemsPerPage = 10;
+  const [waLink, setWaLink] = useState<string | null>(initialWaLink);
 
   const [formData, setFormData] = useState({
     namaLengkap: "",
@@ -169,8 +174,13 @@ export default function RegisterFormClient({
         } else {
           setMessage({
             type: "success",
-            text: "Pendaftaran berhasil! Menunggu verifikasi admin.",
+            text: "Pendaftaran berhasil! Silakan bergabung ke grup WhatsApp.",
           });
+          
+          if (result.whatsappUrl) {
+            setWaLink(result.whatsappUrl);
+          }
+
           setFormData({
             namaLengkap: "",
             nim: "",
@@ -184,8 +194,17 @@ export default function RegisterFormClient({
           // Refresh quota after successful registration
           await refreshQuota();
 
-          // Reload page to get updated registrations
-          window.location.reload();
+          // Add new registration to list
+          if (result.data) {
+             // Cast to Registration ensuring dates are strings if needed, 
+             // but here createdAt from server action might be Date object, so we convert it
+             const newReg = {
+                ...result.data,
+                createdAt: new Date().toISOString(),
+                status: 'PENDING' 
+             } as Registration;
+             setRegistrations(prev => [newReg, ...prev]);
+          }
         }
       } catch (error) {
         setMessage({ type: "error", text: "Terjadi kesalahan sistem" });
@@ -194,8 +213,11 @@ export default function RegisterFormClient({
   };
 
   const handleNimBlur = () => {
-    const existing = registrations.find((r) => r.nim === formData.nim);
-    setUserRegistration(existing || null);
+    // Only check from list if we don't already have a confirmed registration for this user session
+    if (!userRegistration) {
+      const existing = registrations.find((r) => r.nim === formData.nim);
+      if (existing) setUserRegistration(existing);
+    }
   };
 
   const getStatusBadge = (status: RegistrationStatus) => {
@@ -352,7 +374,7 @@ export default function RegisterFormClient({
               </Alert>
             )}
 
-            {userRegistration && (
+            {userRegistration && !waLink && (
               <Alert className="border border-purple-900 bg-purple-900/10 text-purple-400">
                 <AlertCircle className="h-5 w-5 text-purple-400" />
                 <AlertTitle className="font-bold font-mono">
@@ -360,6 +382,26 @@ export default function RegisterFormClient({
                 </AlertTitle>
                 <AlertDescription className="text-purple-300/80 font-mono text-sm">
                   Status: {getStatusMessage(userRegistration.status)}
+                </AlertDescription>
+              </Alert>
+            )}
+
+            {waLink && (
+              <Alert className="border border-green-900 bg-green-900/20 text-green-400 mb-4">
+                <CheckCircle2 className="h-5 w-5 text-green-400" />
+                <AlertTitle className="font-bold font-mono">
+                  REGISTRATION_VERIFIED
+                </AlertTitle>
+                <AlertDescription className="text-green-300/80 font-mono text-sm mt-2 flex flex-col gap-3">
+                  <p>Selamat! Pendaftaran Anda telah diverifikasi. Silakan bergabung ke grup WhatsApp.</p>
+                  <Button 
+                    asChild 
+                    className="w-full md:w-fit bg-green-600 hover:bg-green-700 text-white font-bold"
+                  >
+                    <Link href={waLink} target="_blank">
+                       JOIN WHATSAPP GROUP <ArrowRight className="ml-2 w-4 h-4"/>
+                    </Link>
+                  </Button>
                 </AlertDescription>
               </Alert>
             )}
@@ -400,7 +442,7 @@ export default function RegisterFormClient({
                     onChange={(e) =>
                       setFormData({ ...formData, namaLengkap: e.target.value })
                     }
-                    disabled={isPending || quotaFull}
+                    disabled={isPending || quotaFull || !!waLink}
                     className="bg-[#111] border-gray-700 text-white placeholder:text-gray-600 focus:border-blue-500 font-mono"
                     placeholder="John Doe"
                   />
@@ -421,7 +463,7 @@ export default function RegisterFormClient({
                       setFormData({ ...formData, nim: e.target.value })
                     }
                     onBlur={handleNimBlur}
-                    disabled={isPending || quotaFull}
+                    disabled={isPending || quotaFull || !!waLink}
                     className="bg-[#111] border-gray-700 text-white placeholder:text-gray-600 focus:border-blue-500 font-mono"
                     placeholder="4.33.23.0.01"
                   />
@@ -443,7 +485,7 @@ export default function RegisterFormClient({
                     onChange={(e) =>
                       setFormData({ ...formData, programStudi: e.target.value })
                     }
-                    disabled={isPending || quotaFull}
+                    disabled={isPending || quotaFull || !!waLink}
                     className="bg-[#111] border-gray-700 text-white placeholder:text-gray-600 focus:border-blue-500 font-mono"
                     placeholder="Teknik Informatika"
                   />
@@ -463,7 +505,7 @@ export default function RegisterFormClient({
                     onChange={(e) =>
                       setFormData({ ...formData, jurusan: e.target.value })
                     }
-                    disabled={isPending || quotaFull}
+                    disabled={isPending || quotaFull || !!waLink}
                     className="bg-[#111] border-gray-700 text-white placeholder:text-gray-600 focus:border-blue-500 font-mono"
                     placeholder="Teknik Elektro"
                   />
@@ -482,7 +524,7 @@ export default function RegisterFormClient({
                   onValueChange={(value) =>
                     setFormData({ ...formData, pilihanPelatihan: value })
                   }
-                  disabled={isPending || quotaFull}
+                  disabled={isPending || quotaFull || !!waLink}
                   required
                 >
                   <SelectTrigger className="bg-[#111] border-gray-700 text-white focus:border-blue-500 font-mono">
@@ -529,7 +571,7 @@ export default function RegisterFormClient({
                   onChange={(e) =>
                     setFormData({ ...formData, noWa: e.target.value })
                   }
-                  disabled={isPending || quotaFull}
+                  disabled={isPending || quotaFull || !!waLink}
                   className="bg-[#111] border-gray-700 text-white placeholder:text-gray-600 focus:border-blue-500 font-mono"
                   placeholder="08xxxxxxxxxx"
                 />
@@ -553,7 +595,7 @@ export default function RegisterFormClient({
                       buktiFollowPdf: e.target.files?.[0] || null,
                     })
                   }
-                  disabled={isPending || quotaFull}
+                  disabled={isPending || quotaFull || !!waLink}
                   className="bg-[#111] border-gray-700 text-white file:bg-gray-800 file:text-gray-300 file:border-0 file:mr-4 file:py-2 file:px-4 file:rounded font-mono cursor-pointer"
                 />
                 <p className="text-xs text-gray-500 font-mono">
@@ -579,7 +621,7 @@ export default function RegisterFormClient({
 
               <Button
                 type="submit"
-                disabled={isPending || quotaFull || !!userRegistration}
+                disabled={isPending || quotaFull || !!userRegistration || !!waLink}
                 className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold py-3 rounded font-mono tracking-wider disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isPending

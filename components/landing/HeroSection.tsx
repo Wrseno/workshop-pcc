@@ -31,7 +31,7 @@ export default function HeroSection({ mode, title, description }: HeroSectionPro
             </div>
             
             <h1 className="text-5xl md:text-7xl font-black text-white leading-tight tracking-tight">
-              TRAINING BASIC <br />
+              {mode === 'TRAINING_BASIC' ? 'TRAINING BASIC' : 'PCC CLASS'} <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300">
                 WORKSHOP
               </span> <br />
@@ -43,7 +43,7 @@ export default function HeroSection({ mode, title, description }: HeroSectionPro
                 Stop watching tech happen. Start building it. 
                 </span>
                 <br />
-              Program pelatihan dasar untuk mengembangkan keterampilan teknis di bidang IT.
+              {description}
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
@@ -79,7 +79,7 @@ export default function HeroSection({ mode, title, description }: HeroSectionPro
                 <div className="flex items-center gap-2 text-green-400">
                   <ChevronRight className="w-4 h-4" />
                   <span className="text-blue-400">~</span>
-                  <span className="text-white">pcc init --batch=2025</span>
+                  <span className="text-white">pcc init --batch=2026</span>
                 </div>
                 
                 <div className="text-gray-500 pl-6">Loading modules...</div>

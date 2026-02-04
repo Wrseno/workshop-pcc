@@ -91,6 +91,18 @@ export function TeamTab({
                 ALL ({teamMembers.length})
               </Button>
               <Button
+                variant={teamFilter === "LITBANG" ? "default" : "outline"}
+                size="sm"
+                onClick={() => handleFilterChange("LITBANG")}
+                className={
+                  teamFilter === "LITBANG"
+                    ? "bg-purple-600 text-white border-0 font-mono"
+                    : "bg-[#111] border-gray-800 text-gray-400 hover:text-white font-mono"
+                }
+              >
+                LITBANG ({teamMembers.filter((m) => m.type === "LITBANG").length})
+              </Button>
+              <Button
                 variant={teamFilter === "DIVISI" ? "default" : "outline"}
                 size="sm"
                 onClick={() => handleFilterChange("DIVISI")}
@@ -120,7 +132,108 @@ export function TeamTab({
           </div>
         </div>
 
-        {/* Division Section */}
+                {/* Litbang Section */}
+        {(teamFilter === "LITBANG" || teamFilter === "ALL") && (
+          <div className="mb-8">
+            <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+              <Badge
+                variant="secondary"
+                className="bg-purple-900/20 text-purple-400 border border-purple-900/50 font-mono"
+              >
+                RESEARCH_&_DEVELOPMENT
+              </Badge>
+            </h3>
+            <Table>
+              <TableHeader>
+                <TableRow className="border-gray-800 hover:bg-transparent">
+                  <TableHead className="font-mono text-gray-400">
+                    PHOTO
+                  </TableHead>
+                  <TableHead className="font-mono text-gray-400">
+                    NAME
+                  </TableHead>
+                  <TableHead className="font-mono text-gray-400">
+                    POSITION
+                  </TableHead>
+                  <TableHead className="font-mono text-gray-400">
+                    DESCRIPTION
+                  </TableHead>
+                  <TableHead className="font-mono text-gray-400">
+                    ORDER
+                  </TableHead>
+                  <TableHead className="font-mono text-gray-400">
+                    ACTION
+                  </TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {paginatedTeamMembers
+                  .filter((m) => m.type === "LITBANG")
+                  .map((member) => (
+                    <TableRow
+                      key={member.id}
+                      className="border-gray-800 hover:bg-gray-900/50 transition"
+                    >
+                      <TableCell>
+                        {member.avatarUrl ? (
+                          <img
+                            src={member.avatarUrl}
+                            alt={member.name}
+                            className="w-10 h-10 rounded object-cover border border-gray-700"
+                          />
+                        ) : (
+                          <div className="w-10 h-10 rounded bg-gray-800 border border-gray-700 flex items-center justify-center text-xs font-mono">
+                            N/A
+                          </div>
+                        )}
+                      </TableCell>
+                      <TableCell className="font-mono text-white text-sm font-medium">
+                        {member.name}
+                      </TableCell>
+                      <TableCell className="font-mono text-gray-400 text-sm">
+                        {member.position}
+                      </TableCell>
+                      <TableCell className="text-gray-400 text-xs max-w-xs truncate font-mono">
+                        {member.description || "-"}
+                      </TableCell>
+                      <TableCell className="font-mono text-gray-400 text-sm">
+                        {member.order}
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex items-center gap-2">
+                          <EditTeamMemberDialog
+                            member={member}
+                            onSuccess={onSuccess}
+                          />
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => onDelete(member.id)}
+                            className="text-red-400 hover:text-red-300 hover:bg-red-900/20"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                {paginatedTeamMembers.filter((m) => m.type === "LITBANG")
+                  .length === 0 && (
+                  <TableRow>
+                    <TableCell
+                      colSpan={6}
+                      className="text-center py-8 text-gray-500 font-mono text-sm"
+                    >
+                      NO_DATA_FOUND
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </div>
+        )}
+
+{/* Division Section */}
         {(teamFilter === "DIVISI" || teamFilter === "ALL") && (
           <div className="mb-8">
             <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">

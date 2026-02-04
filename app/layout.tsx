@@ -8,7 +8,7 @@ const jetbrainsMono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-mon
 
 export const metadata: Metadata = {
   title: {
-    default: "PCC_POLINES // WORKSHOP",
+    default: "Workshop - UKM PCC POLINES",
     template: "%s | Workshop PCC"
   },
   description: "Official Portal of Workshop Division UKM PCC Polines. Providing training in Software, Network, and Multimedia.",
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     apple: '/images/pcc.png',
   },
   openGraph: {
-    title: "PCC_POLINES // WORKSHOP",
+    title: "Workshop - UKM PCC POLINES",
     description: "Official Portal of Workshop Division UKM PCC Polines. Join our training programs.",
     siteName: "Workshop PCC",
     images: [
@@ -37,7 +37,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: "PCC_POLINES // WORKSHOP",
+    title: "Workshop - UKM PCC POLINES",
     description: "Official Portal of Workshop Division UKM PCC Polines.",
     images: ['/images/pcc.png'],
   },

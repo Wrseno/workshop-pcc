@@ -26,12 +26,29 @@ export async function getConfig() {
   }
 }
 
-export async function updateConfig(mode: 'TRAINING_BASIC' | 'PCC_CLASS') {
+export async function updateConfig(data: {
+  mode?: 'TRAINING_BASIC' | 'PCC_CLASS',
+  maxQuotaSoftware?: number,
+  maxQuotaNetwork?: number,
+  maxQuotaMultimedia?: number,
+  waLinkSoftware?: string,
+  waLinkNetwork?: string,
+  waLinkMultimedia?: string
+}) {
   try {
     const config = await prisma.siteConfig.upsert({
       where: { id: 1 },
-      update: { mode },
-      create: { id: 1, mode }
+      update: data,
+      create: { 
+        id: 1, 
+        mode: data.mode || 'TRAINING_BASIC',
+        maxQuotaSoftware: data.maxQuotaSoftware ?? 35,
+        maxQuotaNetwork: data.maxQuotaNetwork ?? 35,
+        maxQuotaMultimedia: data.maxQuotaMultimedia ?? 35,
+        waLinkSoftware: data.waLinkSoftware,
+        waLinkNetwork: data.waLinkNetwork,
+        waLinkMultimedia: data.waLinkMultimedia
+      }
     })
 
     revalidatePath('/')

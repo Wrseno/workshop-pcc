@@ -18,6 +18,7 @@ model Registration {
   noWa                  String
   buktiFollowPdfUrl     String
   status                RegistrationStatus   @default(PENDING)
+  ipAddress             String?
   createdAt             DateTime             @default(now())
   updatedAt             DateTime             @updatedAt
 }
@@ -40,6 +41,9 @@ model SiteConfig {
   maxQuotaSoftware    Int      @default(35)
   maxQuotaNetwork     Int      @default(35)
   maxQuotaMultimedia  Int      @default(35)
+  waLinkSoftware      String?
+  waLinkNetwork       String?
+  waLinkMultimedia    String?
 }
 
 enum SiteMode {
@@ -63,6 +67,7 @@ model TeamMember {
 enum TeamType {
   DIVISI
   DEPARTEMEN
+  LITBANG
 }
 
 enum DepartmentType {

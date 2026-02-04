@@ -10,10 +10,24 @@ export async function getTeamMembers() {
     const teamMembers = await prisma.teamMember.findMany({
       orderBy: { order: 'asc' }
     })
-    return { success: true, data: teamMembers }
+
+    const sortedMembers = [...teamMembers].sort((a, b) => {
+      const typeOrder: Record<string, number> = {
+        LITBANG: 0,
+        DIVISI: 1,
+        DEPARTEMEN: 2
+      }
+      const orderA = typeOrder[a.type as string] ?? 99
+      const orderB = typeOrder[b.type as string] ?? 99
+      
+      if (orderA !== orderB) return orderA - orderB
+      return a.order - b.order
+    })
+
+    return { success: true, data: sortedMembers }
   } catch (error) {
     console.error('Error fetching team members:', error)
-    return { success: false, error: 'Failed to fetch team members' }
+    return { success: false, error: error instanceof Error ? error.message : 'Failed to fetch team members' }
   }
 }
 

@@ -29,12 +29,12 @@ export async function createRegistration(data: {
   buktiFollowPdfUrl: string
 }) {
   try {
+    const headersList = await headers();
+    const forwarded = headersList.get("x-forwarded-for");
+    const ip = forwarded ? forwarded.split(",")[0].trim() : "unknown";
+
     // Rate limiting for registration
     if (registrationRateLimit) {
-      const headersList = await headers();
-      const forwarded = headersList.get("x-forwarded-for");
-      const ip = forwarded ? forwarded.split(",")[0].trim() : "unknown";
-      
       const { success } = await registrationRateLimit.limit(ip);
       
       if (!success) {
@@ -45,12 +45,42 @@ export async function createRegistration(data: {
     const { namaLengkap, nim, programStudi, jurusan, pilihanPelatihan, noWa, buktiFollowPdfUrl } = data
 
     // Check if NIM already exists
-    const existing = await prisma.registration.findUnique({
-      where: { nim }
+    const existingNim = await prisma.registration.findFirst({
+      where: { 
+        nim,
+        status: { not: 'REJECT' }
+      }
     })
 
-    if (existing) {
+    if (existingNim) {
       return { success: false, error: 'NIM sudah terdaftar' }
+    }
+
+    // Check if NoWA already exists
+    const existingWa = await prisma.registration.findFirst({
+      where: { 
+        noWa,
+        status: { not: 'REJECT' }
+      }
+    })
+
+    if (existingWa) {
+      return { success: false, error: 'Nomor WhatsApp sudah terdaftar' }
+    }
+
+    // Check if IP already exists (1 IP = 1 registration)
+    // Removed localhost exclusion for testing
+    if (ip && ip !== 'unknown') {
+      const existingIp = await prisma.registration.findFirst({
+        where: { 
+          ipAddress: ip,
+          status: { not: 'REJECT' }
+        }
+      })
+
+      if (existingIp) {
+        return { success: false, error: 'Anda sudah mendaftar dari perangkat/koneksi ini.' }
+      }
     }
 
     // Check quota per training type (only count PENDING and VERIFY status)
@@ -90,11 +120,18 @@ export async function createRegistration(data: {
         jurusan,
         pilihanPelatihan,
         noWa,
-        buktiFollowPdfUrl
+        buktiFollowPdfUrl,
+        ipAddress: ip
       }
     })
 
     revalidatePath('/admin')
+    
+    // Determine WhatsApp link - Only return if verified (which is not immediately after registration usually)
+    // But user asked "kalau sudah diverifikasi baru link whatsapp muncul"
+    // So usually pending status won't get link immediately.
+    // However, createRegistration returns registration with default status PENDING.
+    
     return { success: true, data: registration }
   } catch (error) {
     console.error('Error creating registration:', error)
@@ -187,5 +224,35 @@ export async function getQuotaInfo() {
   } catch (error) {
     console.error('Error fetching quota:', error)
     return { success: false, error: 'Failed to fetch quota information' }
+  }
+}
+
+export async function checkRegistrationByIp(ip: string) {
+  noStore()
+  try {
+    const registration = await prisma.registration.findFirst({
+      where: {
+        ipAddress: ip,
+        status: { not: 'REJECT' }
+      }
+    })
+
+    if (!registration) return { success: true, data: null }
+    
+    // Check for WhatsApp link if verified
+    let whatsappUrl = null;
+    if (registration.status === 'VERIFY') {
+      const config = await prisma.siteConfig.findUnique({ where: { id: 1 } })
+      if (config) {
+        if (registration.pilihanPelatihan === 'SOFTWARE') whatsappUrl = config.waLinkSoftware;
+        else if (registration.pilihanPelatihan === 'NETWORK') whatsappUrl = config.waLinkNetwork;
+        else if (registration.pilihanPelatihan === 'MULTIMEDIA') whatsappUrl = config.waLinkMultimedia;
+      }
+    }
+    
+    return { success: true, data: registration, whatsappUrl };
+  } catch (error) {
+    console.error('Error checking registration by IP:', error)
+    return { success: false, error: 'Failed to check registration' }
   }
 }

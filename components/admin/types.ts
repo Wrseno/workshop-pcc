@@ -1,6 +1,6 @@
 export type RegistrationStatus = "PENDING" | "VERIFY" | "REJECT";
 export type SiteMode = "TRAINING_BASIC" | "PCC_CLASS";
-export type TeamType = "DIVISI" | "DEPARTEMEN";
+export type TeamType = "DIVISI" | "DEPARTEMEN" | "LITBANG";
 export type DepartmentType = "SOFTWARE" | "NETWORK" | "MULTIMEDIA";
 
 export interface Registration {
@@ -41,4 +41,14 @@ export interface QnaItem {
   answer: string;
   mode: SiteMode | null;
   order: number;
+}
+
+export interface SiteConfig {
+  mode: SiteMode;
+  maxQuotaSoftware: number;
+  maxQuotaNetwork: number;
+  maxQuotaMultimedia: number;
+  waLinkSoftware?: string | null;
+  waLinkNetwork?: string | null;
+  waLinkMultimedia?: string | null;
 }

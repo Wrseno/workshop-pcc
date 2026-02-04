@@ -32,6 +32,7 @@ import {
 } from "@/app/actions/qna";
 import {
   Registration,
+  SiteConfig,
   SiteMode,
   TeamMember,
   Sponsor,
@@ -59,7 +60,7 @@ export default function AdminDashboard() {
   const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
   const [sponsors, setSponsors] = useState<Sponsor[]>([]);
   const [qnaItems, setQnaItems] = useState<QnaItem[]>([]);
-  const [siteMode, setSiteMode] = useState<SiteMode>("TRAINING_BASIC");
+  const [config, setConfig] = useState<SiteConfig | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [quotaInfo, setQuotaInfo] = useState<{
     software: { current: number; max: number; full: boolean };
@@ -105,18 +106,23 @@ export default function AdminDashboard() {
             createdAt: new Date(r.createdAt).toISOString(),
           }))
         );
-      if (teamResult.success && teamResult.data)
+      if (teamResult.success && teamResult.data) {
         setTeamMembers(
           teamResult.data.map((t) => ({
             ...t,
             department: t.department ?? undefined,
+            createdAt: t.createdAt ? new Date(t.createdAt).toISOString() : new Date().toISOString(),
+            updatedAt: t.updatedAt ? new Date(t.updatedAt).toISOString() : new Date().toISOString(),
           }))
         );
+      } else {
+        console.error("Failed to fetch team members", teamResult.error);
+      }
       if (sponsorResult.success && sponsorResult.data)
         setSponsors(sponsorResult.data);
       if (qnaResult.success && qnaResult.data) setQnaItems(qnaResult.data);
       if (configResult.success && configResult.data)
-        setSiteMode(configResult.data.mode);
+        setConfig(configResult.data as any);
       if (quotaResult.success && quotaResult.data)
         setQuotaInfo(quotaResult.data);
     } catch (error) {
@@ -147,14 +153,14 @@ export default function AdminDashboard() {
     }
   };
 
-  const handleUpdateSiteMode = async (mode: SiteMode) => {
+  const handleUpdateConfig = async (data: Partial<SiteConfig>) => {
     try {
-      const result = await updateConfig(mode);
-      if (result.success) {
-        setSiteMode(mode);
+      const result = await updateConfig(data);
+      if (result.success && result.data) {
+        setConfig(result.data as any);
       }
     } catch (error) {
-      console.error("Failed to update mode", error);
+      console.error("Failed to update config", error);
     }
   };
 
@@ -265,8 +271,8 @@ export default function AdminDashboard() {
 
           <TabsContent value="config">
             <ConfigTab
-              siteMode={siteMode}
-              onModeChange={handleUpdateSiteMode}
+              config={config}
+              onUpdateConfig={handleUpdateConfig}
             />
           </TabsContent>
 

@@ -14,7 +14,7 @@ interface TeamMember {
   position: string
   avatarUrl: string | null
   description: string | null
-  type: 'DIVISI' | 'DEPARTEMEN'
+  type: 'DIVISI' | 'DEPARTEMEN' | 'LITBANG'
   department?: 'SOFTWARE' | 'NETWORK' | 'MULTIMEDIA' | null
   order: number
 }
@@ -26,6 +26,7 @@ interface TeamSectionProps {
 export default function TeamSection({ teamMembers }: TeamSectionProps) {
   if (teamMembers.length === 0) return null
 
+  const litbangMembers = teamMembers.filter(m => m.type === 'LITBANG')
   const divisiMembers = teamMembers.filter(m => m.type === 'DIVISI')
   const departemenMembers = teamMembers.filter(m => m.type === 'DEPARTEMEN')
   
@@ -75,7 +76,68 @@ export default function TeamSection({ teamMembers }: TeamSectionProps) {
         <p className="text-lg text-gray-400 font-light">Tim dibalik pelatihan-pelatihan yang diselenggarakan UKM PCC.</p>
       </div>
 
-      {/* Divisi Workshop Members */}
+            {/* Litbang Members */}
+      {litbangMembers.length > 0 && (
+        <div className="mb-16 relative z-10">
+          <div className="text-center mb-8">
+            <Badge className="bg-purple-900/20 text-purple-400 border border-purple-500/30 px-4 py-2 text-sm font-mono tracking-wider rounded-sm">
+              RESEARCH_&_DEVELOPMENT
+            </Badge>
+          </div>
+          <div className="grid md:grid-cols-2 gap-8 justify-center">
+            {litbangMembers.map((member) => (
+              <Card key={member.id} className="group relative overflow-hidden border border-gray-800 bg-[#0a0a0a] hover:border-purple-500/50 transition-all duration-500 hover:shadow-[0_0_30px_rgba(168,85,247,0.1)] rounded-xl max-w-md mx-auto w-full">
+                
+                {/* Card content */}
+                <div className="relative">
+                  <CardHeader className="text-center pt-8">
+                    <div className="relative mx-auto mb-6">
+                      {/* Avatar container */}
+                      <div className="relative w-32 h-32 mx-auto rounded-xl bg-gray-900 border border-gray-800 p-1 group-hover:border-purple-500/50 transition-colors duration-500">
+                        <div className="w-full h-full rounded-lg bg-gray-800 flex items-center justify-center overflow-hidden relative">
+                          {member.avatarUrl ? (
+                            <ImageWithSkeleton 
+                              src={member.avatarUrl} 
+                              alt={member.name} 
+                              className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
+                              skeletonClassName="rounded-lg"
+                            />
+                          ) : (
+                            <span className="text-4xl font-bold font-mono text-gray-700 group-hover:text-purple-400 transition-colors">
+                              {member.name.charAt(0)}
+                            </span>
+                          )}
+                        </div>
+                        {/* Tech corners */}
+                        <div className="absolute -top-1 -left-1 w-3 h-3 border-t border-l border-gray-600 group-hover:border-purple-500 transition-colors duration-500"></div>
+                        <div className="absolute -top-1 -right-1 w-3 h-3 border-t border-r border-gray-600 group-hover:border-purple-500 transition-colors duration-500"></div>
+                        <div className="absolute -bottom-1 -left-1 w-3 h-3 border-b border-l border-gray-600 group-hover:border-purple-500 transition-colors duration-500"></div>
+                        <div className="absolute -bottom-1 -right-1 w-3 h-3 border-b border-r border-gray-600 group-hover:border-purple-500 transition-colors duration-500"></div>
+                      </div>
+                    </div>
+                    
+                    <CardTitle className="text-xl font-bold text-white mb-2 group-hover:text-purple-400 transition-colors duration-300 font-mono">
+                      {member.name}
+                    </CardTitle>
+                    <CardDescription className="text-gray-400 font-mono text-xs tracking-wider uppercase">
+                      &lt;{member.position} /&gt;
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="pb-8 text-center px-6">
+                     {member.description && (
+                       <p className="text-gray-500 text-sm leading-relaxed mb-4 line-clamp-3">
+                         {member.description}
+                       </p>
+                     )}
+                  </CardContent>
+                </div>
+              </Card>
+            ))}
+          </div>
+        </div>
+      )}
+
+{/* Divisi Workshop Members */}
       {divisiMembers.length > 0 && (
         <div className="mb-16 relative z-10">
           <div className="text-center mb-8">

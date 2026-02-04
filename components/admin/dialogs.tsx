@@ -92,6 +92,12 @@ export function AddTeamMemberDialog({ onSuccess }: { onSuccess: () => void }) {
               </SelectTrigger>
               <SelectContent className="bg-[#0a0a0a] border-gray-800 text-white">
                 <SelectItem
+                  value="LITBANG"
+                  className="focus:bg-gray-800 focus:text-white font-mono"
+                >
+                  LITBANG (R&D)
+                </SelectItem>
+                <SelectItem
                   value="DIVISI"
                   className="focus:bg-gray-800 focus:text-white font-mono"
                 >
@@ -256,6 +262,12 @@ export function EditTeamMemberDialog({
                 <SelectValue />
               </SelectTrigger>
               <SelectContent className="bg-[#0a0a0a] border-gray-800 text-white">
+                <SelectItem
+                  value="LITBANG"
+                  className="focus:bg-gray-800 focus:text-white font-mono"
+                >
+                  LITBANG (R&D)
+                </SelectItem>
                 <SelectItem
                   value="DIVISI"
                   className="focus:bg-gray-800 focus:text-white font-mono"

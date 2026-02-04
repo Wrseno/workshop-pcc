@@ -65,6 +65,9 @@ export default async function Home() {
   const sponsors = sponsorsResult.success && sponsorsResult.data ? sponsorsResult.data : []
   const qnaItems = qnaResult.success && qnaResult.data ? qnaResult.data : []
 
+  // Filter QnA items based on current mode or if mode is null (all modes)
+  const filteredQnaItems = qnaItems.filter(item => !item.mode || item.mode === config.mode)
+
   const content = trainingDescriptions[config.mode as keyof typeof trainingDescriptions] || trainingDescriptions.TRAINING_BASIC
 
   return (
@@ -83,7 +86,7 @@ export default async function Home() {
       />
       <TeamSection teamMembers={teamMembers} />
       <SponsorsSection sponsors={sponsors} />
-      <FaqSection qnaItems={qnaItems} />
+      <FaqSection qnaItems={filteredQnaItems} />
       <CtaSection />
       <Footer />
     </div>
