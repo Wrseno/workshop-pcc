@@ -4,7 +4,6 @@ import { prisma } from '@/lib/prisma'
 import { revalidatePath } from 'next/cache'
 import { unstable_noStore as noStore } from 'next/cache'
 import { headers } from 'next/headers'
-import { registrationRateLimit } from '@/lib/rate-limit'
 
 export async function getRegistrations() {
   noStore()
@@ -33,15 +32,6 @@ export async function createRegistration(data: {
     const forwarded = headersList.get("x-forwarded-for");
     const ip = forwarded ? forwarded.split(",")[0].trim() : "unknown";
 
-    // Rate limiting for registration
-    if (registrationRateLimit) {
-      const { success } = await registrationRateLimit.limit(ip);
-      
-      if (!success) {
-        return { success: false, error: 'Terlalu banyak percobaan registrasi. Coba lagi dalam 1 jam.' };
-      }
-    }
-
     const { namaLengkap, nim, programStudi, jurusan, pilihanPelatihan, noWa, buktiFollowPdfUrl } = data
 
     // Check if NIM already exists
@@ -66,21 +56,6 @@ export async function createRegistration(data: {
 
     if (existingWa) {
       return { success: false, error: 'Nomor WhatsApp sudah terdaftar' }
-    }
-
-    // Check if IP already exists (1 IP = 1 registration)
-    // Removed localhost exclusion for testing
-    if (ip && ip !== 'unknown') {
-      const existingIp = await prisma.registration.findFirst({
-        where: { 
-          ipAddress: ip,
-          status: { not: 'REJECT' }
-        }
-      })
-
-      if (existingIp) {
-        return { success: false, error: 'Anda sudah mendaftar dari perangkat/koneksi ini.' }
-      }
     }
 
     // Check quota per training type (only count PENDING and VERIFY status)
