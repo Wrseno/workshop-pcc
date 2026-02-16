@@ -39,8 +39,9 @@ import {
   ChevronLeft,
   ChevronRight,
   Search,
+  PhoneCall,
 } from "lucide-react";
-import { createRegistration, getQuotaInfo } from "@/app/actions/registrations";
+import { createRegistration, getQuotaInfo, checkRegistrationByPhone } from "@/app/actions/registrations";
 import { uploadFile } from "@/app/actions/upload";
 
 type RegistrationStatus = "PENDING" | "VERIFY" | "REJECT";
@@ -67,15 +68,11 @@ interface QuotaInfo {
 interface RegisterFormClientProps {
   initialRegistrations: Registration[];
   initialQuota: QuotaInfo | null;
-  existingRegistration?: Registration | null;
-  initialWaLink?: string | null;
 }
 
 export default function RegisterFormClient({
   initialRegistrations,
   initialQuota,
-  existingRegistration = null,
-  initialWaLink = null,
 }: RegisterFormClientProps) {
   const [registrations, setRegistrations] =
     useState<Registration[]>(initialRegistrations);
@@ -87,12 +84,14 @@ export default function RegisterFormClient({
   const [quotaFull, setQuotaFull] = useState(false);
   const [quotaInfo, setQuotaInfo] = useState<QuotaInfo | null>(initialQuota);
   const [userRegistration, setUserRegistration] = useState<Registration | null>(
-    existingRegistration
+    null
   );
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
   const itemsPerPage = 10;
-  const [waLink, setWaLink] = useState<string | null>(initialWaLink);
+  const [waLink, setWaLink] = useState<string | null>(null);
+  const [checkPhoneNumber, setCheckPhoneNumber] = useState("");
+  const [isCheckingStatus, setIsCheckingStatus] = useState(false);
 
   const [formData, setFormData] = useState({
     namaLengkap: "",
@@ -118,6 +117,56 @@ export default function RegisterFormClient({
     const result = await getQuotaInfo();
     if (result.success && result.data) {
       setQuotaInfo(result.data);
+    }
+  };
+
+  const handleCheckStatus = async () => {
+    if (!checkPhoneNumber.trim()) {
+      setMessage({ type: "error", text: "Masukkan nomor WhatsApp untuk mengecek status" });
+      return;
+    }
+
+    setIsCheckingStatus(true);
+    setMessage(null);
+    setUserRegistration(null);
+    setWaLink(null);
+
+    try {
+      const result = await checkRegistrationByPhone(checkPhoneNumber);
+      
+      if (!result.success) {
+        setMessage({ type: "error", text: result.error || "Gagal mengecek status" });
+      } else if (!result.data) {
+        setMessage({ 
+          type: "error", 
+          text: "Nomor WhatsApp tidak ditemukan atau pendaftaran ditolak" 
+        });
+      } else {
+        // Convert Date to string for createdAt
+        const registration = {
+          ...result.data,
+          createdAt: result.data.createdAt instanceof Date 
+            ? result.data.createdAt.toISOString() 
+            : result.data.createdAt
+        };
+        setUserRegistration(registration);
+        if (result.waLink) {
+          setWaLink(result.waLink);
+          setMessage({
+            type: "success",
+            text: "Pendaftaran ditemukan dan terverifikasi! Link grup WhatsApp tersedia."
+          });
+        } else {
+          setMessage({
+            type: "success",
+            text: `Status pendaftaran: ${getStatusMessage(result.data.status)}`
+          });
+        }
+      }
+    } catch (error) {
+      setMessage({ type: "error", text: "Terjadi kesalahan sistem" });
+    } finally {
+      setIsCheckingStatus(false);
     }
   };
 
@@ -370,6 +419,43 @@ export default function RegisterFormClient({
                 </AlertDescription>
               </Alert>
             )}
+
+            {/* Check Status Section */}
+            <Card className="bg-[#111] border border-gray-800">
+              <CardHeader className="border-b border-gray-800">
+                <CardTitle className="text-lg font-mono text-white flex items-center gap-2">
+                  <PhoneCall className="w-5 h-5 text-blue-400" />
+                  Join_WhatsApp_Group 
+                </CardTitle>
+                <CardDescription className="text-gray-400 font-mono text-xs">
+                  // Join Grup dengan cek status verifikasi menggunakan nomor WhatsApp Anda
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="pt-6 space-y-4">
+                <div className="flex gap-2">
+                  <div className="flex-1">
+                    <Input
+                      type="tel"
+                      placeholder="08xxxxxxxxxx"
+                      value={checkPhoneNumber}
+                      onChange={(e) => setCheckPhoneNumber(e.target.value)}
+                      disabled={isCheckingStatus}
+                      className="bg-[#0a0a0a] border-gray-700 text-white placeholder:text-gray-600 focus:border-blue-500 font-mono"
+                    />
+                  </div>
+                  <Button
+                    onClick={handleCheckStatus}
+                    disabled={isCheckingStatus || !checkPhoneNumber.trim()}
+                    className="bg-blue-600 hover:bg-blue-700 text-white font-mono"
+                  >
+                    {isCheckingStatus ? "Checking..." : "Check Status"}
+                  </Button>
+                </div>
+                <p className="text-xs text-gray-500 font-mono">
+                  * Masukkan nomor WhatsApp yang Anda gunakan saat mendaftar
+                </p>
+              </CardContent>
+            </Card>
 
             {userRegistration && !waLink && (
               <Alert className="border border-purple-900 bg-purple-900/10 text-purple-400">

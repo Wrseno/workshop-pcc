@@ -212,3 +212,51 @@ export async function checkRegistrationByIp(ip: string) {
     return { success: false, error: 'Failed to check registration' }
   }
 }
+
+export async function checkRegistrationByPhone(noWa: string) {
+  noStore()
+  try {
+    // Find registration by phone number
+    const registration = await prisma.registration.findFirst({
+      where: { 
+        noWa,
+        status: { not: 'REJECT' } // Only find non-rejected registrations
+      }
+    })
+
+    if (!registration) {
+      return { success: true, data: null, waLink: null }
+    }
+
+    // If verified, get the appropriate WhatsApp group link
+    let waLink: string | null = null
+    if (registration.status === 'VERIFY' && registration.pilihanPelatihan) {
+      const config = await prisma.siteConfig.findUnique({
+        where: { id: 1 }
+      })
+
+      if (config) {
+        switch (registration.pilihanPelatihan) {
+          case 'SOFTWARE':
+            waLink = config.waLinkSoftware
+            break
+          case 'NETWORK':
+            waLink = config.waLinkNetwork
+            break
+          case 'MULTIMEDIA':
+            waLink = config.waLinkMultimedia
+            break
+        }
+      }
+    }
+
+    return { 
+      success: true, 
+      data: registration,
+      waLink 
+    }
+  } catch (error) {
+    console.error('Error checking registration by phone:', error)
+    return { success: false, error: 'Failed to check registration' }
+  }
+}
