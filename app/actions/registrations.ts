@@ -205,27 +205,8 @@ export async function getQuotaInfo() {
 export async function checkRegistrationByIp(ip: string) {
   noStore()
   try {
-    const registration = await prisma.registration.findFirst({
-      where: {
-        ipAddress: ip,
-        status: { not: 'REJECT' }
-      }
-    })
-
-    if (!registration) return { success: true, data: null }
-    
-    // Check for WhatsApp link if verified
-    let whatsappUrl = null;
-    if (registration.status === 'VERIFY') {
-      const config = await prisma.siteConfig.findUnique({ where: { id: 1 } })
-      if (config) {
-        if (registration.pilihanPelatihan === 'SOFTWARE') whatsappUrl = config.waLinkSoftware;
-        else if (registration.pilihanPelatihan === 'NETWORK') whatsappUrl = config.waLinkNetwork;
-        else if (registration.pilihanPelatihan === 'MULTIMEDIA') whatsappUrl = config.waLinkMultimedia;
-      }
-    }
-    
-    return { success: true, data: registration, whatsappUrl };
+    // IP-based restriction removed - always return null to allow multiple registrations from same IP
+    return { success: true, data: null }
   } catch (error) {
     console.error('Error checking registration by IP:', error)
     return { success: false, error: 'Failed to check registration' }
