@@ -420,43 +420,6 @@ export default function RegisterFormClient({
               </Alert>
             )}
 
-            {/* Check Status Section */}
-            <Card className="bg-[#111] border border-gray-800">
-              <CardHeader className="border-b border-gray-800">
-                <CardTitle className="text-lg font-mono text-white flex items-center gap-2">
-                  <PhoneCall className="w-5 h-5 text-blue-400" />
-                  Join_WhatsApp_Group 
-                </CardTitle>
-                <CardDescription className="text-gray-400 font-mono text-xs">
-                  // Join Grup dengan cek status verifikasi menggunakan nomor WhatsApp Anda
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="pt-6 space-y-4">
-                <div className="flex gap-2">
-                  <div className="flex-1">
-                    <Input
-                      type="tel"
-                      placeholder="08xxxxxxxxxx"
-                      value={checkPhoneNumber}
-                      onChange={(e) => setCheckPhoneNumber(e.target.value)}
-                      disabled={isCheckingStatus}
-                      className="bg-[#0a0a0a] border-gray-700 text-white placeholder:text-gray-600 focus:border-blue-500 font-mono"
-                    />
-                  </div>
-                  <Button
-                    onClick={handleCheckStatus}
-                    disabled={isCheckingStatus || !checkPhoneNumber.trim()}
-                    className="bg-blue-600 hover:bg-blue-700 text-white font-mono"
-                  >
-                    {isCheckingStatus ? "Checking..." : "Check Status"}
-                  </Button>
-                </div>
-                <p className="text-xs text-gray-500 font-mono">
-                  * Masukkan nomor WhatsApp yang Anda gunakan saat mendaftar
-                </p>
-              </CardContent>
-            </Card>
-
             {userRegistration && !waLink && (
               <Alert className="border border-purple-900 bg-purple-900/10 text-purple-400">
                 <AlertCircle className="h-5 w-5 text-purple-400" />
@@ -717,6 +680,43 @@ export default function RegisterFormClient({
             </form>
           </CardContent>
         </Card>
+
+        {/* Check Status Section */}
+            <Card className="bg-[#111] border border-gray-800 mt-8">
+              <CardHeader className="border-b border-gray-800">
+                <CardTitle className="text-lg font-mono text-white flex items-center gap-2">
+                  <PhoneCall className="w-5 h-5 text-blue-400" />
+                  Join_WhatsApp_Group 
+                </CardTitle>
+                <CardDescription className="text-gray-400 font-mono text-xs">
+                  // Join Grup dengan cek status verifikasi menggunakan nomor WhatsApp Anda
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="pt-6 space-y-4">
+                <div className="flex gap-2">
+                  <div className="flex-1">
+                    <Input
+                      type="tel"
+                      placeholder="08xxxxxxxxxx"
+                      value={checkPhoneNumber}
+                      onChange={(e) => setCheckPhoneNumber(e.target.value)}
+                      disabled={isCheckingStatus}
+                      className="bg-[#0a0a0a] border-gray-700 text-white placeholder:text-gray-600 focus:border-blue-500 font-mono"
+                    />
+                  </div>
+                  <Button
+                    onClick={handleCheckStatus}
+                    disabled={isCheckingStatus || !checkPhoneNumber.trim()}
+                    className="bg-blue-600 hover:bg-blue-700 text-white font-mono"
+                  >
+                    {isCheckingStatus ? "Checking..." : "Check Status"}
+                  </Button>
+                </div>
+                <p className="text-xs text-gray-500 font-mono">
+                  * Masukkan nomor WhatsApp yang Anda gunakan saat mendaftar
+                </p>
+              </CardContent>
+            </Card>
 
         {/* Registration List - Hidden when all quota is full */}
         {!quotaFull && (
