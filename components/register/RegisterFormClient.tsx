@@ -432,26 +432,6 @@ export default function RegisterFormClient({
               </Alert>
             )}
 
-            {waLink && (
-              <Alert className="border border-green-900 bg-green-900/20 text-green-400 mb-4">
-                <CheckCircle2 className="h-5 w-5 text-green-400" />
-                <AlertTitle className="font-bold font-mono">
-                  REGISTRATION_VERIFIED
-                </AlertTitle>
-                <AlertDescription className="text-green-300/80 font-mono text-sm mt-2 flex flex-col gap-3">
-                  <p>Selamat! Pendaftaran Anda telah diverifikasi. Silakan bergabung ke grup WhatsApp.</p>
-                  <Button 
-                    asChild 
-                    className="w-full md:w-fit bg-green-600 hover:bg-green-700 text-white font-bold"
-                  >
-                    <Link href={waLink} target="_blank">
-                       JOIN WHATSAPP GROUP <ArrowRight className="ml-2 w-4 h-4"/>
-                    </Link>
-                  </Button>
-                </AlertDescription>
-              </Alert>
-            )}
-
             {message && (
               <Alert
                 variant={message.type === "error" ? "destructive" : "default"}
@@ -680,6 +660,26 @@ export default function RegisterFormClient({
             </form>
           </CardContent>
         </Card>
+
+         {waLink && (
+              <Alert className="border border-green-900 bg-green-900/20 text-green-400 mb-4">
+                <CheckCircle2 className="h-5 w-5 text-green-400" />
+                <AlertTitle className="font-bold font-mono">
+                  REGISTRATION_VERIFIED
+                </AlertTitle>
+                <AlertDescription className="text-green-300/80 font-mono text-sm mt-2 flex flex-col gap-3">
+                  <p>Selamat! Pendaftaran Anda telah diverifikasi. Silakan bergabung ke grup WhatsApp.</p>
+                  <Button 
+                    asChild 
+                    className="w-full md:w-fit bg-green-600 hover:bg-green-700 text-white font-bold"
+                  >
+                    <Link href={waLink} target="_blank">
+                       JOIN WHATSAPP GROUP <ArrowRight className="ml-2 w-4 h-4"/>
+                    </Link>
+                  </Button>
+                </AlertDescription>
+              </Alert>
+            )}
 
         {/* Check Status Section */}
             <Card className="bg-[#111] border border-gray-800 mt-8">
