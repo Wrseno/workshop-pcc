@@ -661,7 +661,7 @@ export default function RegisterFormClient({
                   >
                     @workshop.pcc
                   </Link>{" "}
-                  serta SS Grup Anggota Aktif dalam satu PDF, maks 2MB.
+                  dalam satu PDF, maks 2MB.
                 </p>
               </div>
 
